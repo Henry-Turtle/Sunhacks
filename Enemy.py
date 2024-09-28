@@ -41,7 +41,7 @@ class Triangle(Enemy):
     def __str__(self) -> str:
         return f"Triangle [{self.x_pos}, {self.y_pos}, {self.speed}, {self.damage}]"
     
-    def draw(self, screen: pygame.Surface, center: tuple, target: tuple):
+    def draw(self, screen: pygame.Surface, target: tuple):
 
         centroid = (self.x_pos, self.y_pos)
         distance = ((self.x_pos**2)+(self.y_pos**2))**0.5
