@@ -13,3 +13,8 @@ class Enemy:
     
     def handle_movement(self) -> None:
         pass
+
+class Triangle(Enemy):
+
+    def __str__(self) -> str:
+        return f""
