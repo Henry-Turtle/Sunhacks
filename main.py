@@ -19,12 +19,14 @@ CENTER = (WIDTH/2, HEIGHT/2)
 while running:
     keys = pygame.key.get_pressed()  # Checking pressed keys
     if keys[pygame.K_w]:
-        game.player.move(-1, 0)
+        game.player.move(0, -1)
         
     if keys[pygame.K_a]:
-        game.player.move(0, 1)
+        game.player.move(-1, 0)
     if keys[pygame.K_s]:
-        game.player.move()
+        game.player.move(0,1)
+    if keys[pygame.K_d]:
+        game.player.move(1, 0)
 
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
@@ -42,7 +44,7 @@ while running:
 
     #*Render all enemies
     for enemy in game.stage.enemies:
-        enemy.handle_movement(CENTER[0], CENTER[1])
+        enemy.handle_movement(CENTER)
         #pygame.draw.rect(screen, pygame.Color(255, 0, 0, 0), pygame.Rect(enemy.x_pos, enemy.y_pos, enemy.width, enemy.height))
         enemy.draw(screen)
 
