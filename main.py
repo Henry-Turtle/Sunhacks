@@ -2,7 +2,7 @@ import pygame
 
 # pygame setup
 pygame.init()
-screen = pygame.display.set_mode((1280, 720))
+screen = pygame.display.set_mode((1920, 1080))
 clock = pygame.time.Clock()
 running = True
 
@@ -17,6 +17,7 @@ while running:
     screen.fill("black")
 
     # RENDER YOUR GAME HERE
+    
 
     # flip() the display to put your work on screen
     pygame.display.flip()
