@@ -41,23 +41,9 @@ class Triangle(Enemy):
     
     def draw(self, screen: pygame.Surface, center: tuple, target: tuple):
 
-        # points = []
         centroid = (self.x_pos, self.y_pos)
-        # median = ((3**0.5)/2)*self.side
-        # point1 = (((median*0.67) + centroidy), (centroidx))
-        # point2 = ()
-
-        angle_to_target = math.atan2(target[1] - centroid[1], target[0] - centroid[0])
-
-        # Angles for the three vertices of the triangle
-        angle1 = angle_to_target
-        angle2 = angle1 + 2 * math.pi / 3
-        angle3 = angle1 - 2 * math.pi / 3
-
-        # Calculate the vertices based on the centroid and self.side
-        vertex1 = (centroid[0] + self.side * math.cos(angle1), centroid[1] + self.side * math.sin(angle1))
-        vertex2 = (centroid[0] + self.side * math.cos(angle2), centroid[1] + self.side * math.sin(angle2))
-        vertex3 = (centroid[0] + self.side * math.cos(angle3), centroid[1] + self.side * math.sin(angle3))
+        
+        
 
         pygame.draw.polygon(screen, pygame.Color(255, 0, 0) [vertex1, vertex2, vertex3])
         pygame.draw.polygon()
