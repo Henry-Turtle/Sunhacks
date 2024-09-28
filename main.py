@@ -12,7 +12,7 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 running = True
 game = Game()
-game.stage.spawn_enemy(Enemy(1.0, 100.0, 100, 50, 50, 50))
+game.stage.spawn_enemy(Enemy(0.1, 100.0, 100, 50, 50, 50))
 mouseX, mouseY = pygame.mouse.get_pos()
 CENTER = (WIDTH/2, HEIGHT/2)
 
@@ -46,7 +46,7 @@ while running:
     for enemy in game.stage.enemies:
         enemy.handle_movement(CENTER)
         #pygame.draw.rect(screen, pygame.Color(255, 0, 0, 0), pygame.Rect(enemy.x_pos, enemy.y_pos, enemy.width, enemy.height))
-        enemy.draw(screen)
+        enemy.draw(screen, CENTER)
 
     #*render the player
 
