@@ -12,4 +12,5 @@ class Stage:
     def move_enemies(self):
         for enemy in self.enemies:
             enemy.handle_movements()
-
+    def get_enemies(self):
+        return self.enemies
