@@ -1,5 +1,6 @@
 from Stage import Stage
 from Player import Player
+import pygame
 
 class Game:
     stage: Stage
@@ -9,3 +10,6 @@ class Game:
         self.stage = Stage()
         self.player = Player()
     
+    def shoot(self):
+        damaged_enemies = self.player.getCrosshair().collidelistall(self.stage.enemies)
+

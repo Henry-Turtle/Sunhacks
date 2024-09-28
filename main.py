@@ -1,6 +1,6 @@
 import pygame
 from Game import Game
-from Enemy import Enemy
+from Enemy import *
 from Stage import Stage
 
 
@@ -12,7 +12,7 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 running = True
 game = Game()
-game.stage.spawn_enemy(Enemy(5, 100.0, 100, 50, 50, 50))
+game.stage.spawn_enemy(Triangle(5, 100.0, 100, 50, 50))
 mouseX, mouseY = pygame.mouse.get_pos()
 CENTER = (WIDTH/2, HEIGHT/2)
 
@@ -25,6 +25,9 @@ while running:
             running = False
         if event.type == pygame.MOUSEMOTION:
             mouseX, mouseY = pygame.mouse.get_pos()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            
+            game.shoot()
 
 
     # fill the screen with a color to wipe away anything from last frame
@@ -40,7 +43,7 @@ while running:
 
     #*render the crosshairs
 
-    pygame.draw.circle(screen, pygame.Color("blue"), (mouseX, mouseY), 20, 2)
+    pygame.draw.rect(screen, pygame.Color("blue"), game.player.getCrosshair((mouseX, mouseY)), 2)
 
 
 

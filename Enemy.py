@@ -26,8 +26,10 @@ class Enemy:
         self.y_pos -= self.speed * v[1]
 
     def draw(self, screen: pygame.Surface, target: tuple):
-        pygame.draw.rect(screen, pygame.Color(255, 0, 0), pygame.Rect(self.x_pos - (self.width/2), self.y_pos - (self.height/2), self.width, self.height))
+        pygame.draw.rect(screen, pygame.Color(255, 0, 0), pygame.Rect(self.x_pos, self.y_pos, self.width, self.height))
 
+    def getRect(self) -> pygame.Rect:
+        return pygame.Rect(self.x_pos, self.y_pos, self.width, self.height)
 
 class Triangle(Enemy):
 
