@@ -12,21 +12,11 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 running = True
 game = Game()
-game.stage.spawn_enemy(Enemy(0.1, 100.0, 100, 50, 50, 50))
+game.stage.spawn_enemy(Enemy(5, 100.0, 100, 50, 50, 50))
 mouseX, mouseY = pygame.mouse.get_pos()
 CENTER = (WIDTH/2, HEIGHT/2)
 
 while running:
-    keys = pygame.key.get_pressed()  # Checking pressed keys
-    if keys[pygame.K_w]:
-        game.player.move(0, -1)
-        
-    if keys[pygame.K_a]:
-        game.player.move(-1, 0)
-    if keys[pygame.K_s]:
-        game.player.move(0,1)
-    if keys[pygame.K_d]:
-        game.player.move(1, 0)
 
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
@@ -48,9 +38,9 @@ while running:
         #pygame.draw.rect(screen, pygame.Color(255, 0, 0, 0), pygame.Rect(enemy.x_pos, enemy.y_pos, enemy.width, enemy.height))
         enemy.draw(screen, CENTER)
 
-    #*render the player
+    #*render the crosshairs
 
-    game.player.draw(screen)
+    pygame.draw.circle(screen, pygame.Color("blue"), (mouseX, mouseY), 20, 2)
 
 
 

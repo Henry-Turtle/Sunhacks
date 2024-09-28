@@ -17,7 +17,7 @@ class Enemy:
     
     def handle_movement(self, target: tuple) -> None:
 
-        v = (self.x_pos - target(0), self.y_pos - target[1])
+        v = [self.x_pos - target[0], self.y_pos - target[1]]
         magnitude = (v[0]**2 + v[1]**2)**0.5
         v[0] = v[0] / magnitude
         v[1] = v[1] / magnitude
