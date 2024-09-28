@@ -12,5 +12,7 @@ class Stage:
     def move_enemies(self):
         for enemy in self.enemies:
             enemy.handle_movements()
-    def get_enemies(self):
-        return self.enemies
+
+    #@enemy_array_position is the position of the enemy in the "enemies" array. This will be much faster
+    def destroy_enemy(self, enemy_array_position: int):
+        self.enemies.pop[enemy_array_position]
