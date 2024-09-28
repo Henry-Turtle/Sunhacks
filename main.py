@@ -14,7 +14,7 @@ mygame.stage.spawn_enemy(Enemy(1.0, 100.0, 100, 50, 50, 50))
 mouseX, mouseY = pygame.mouse.get_pos()
 
 while running:
-    # poll for events
+    # poll for events   jk 
     # pygame.QUIT event means the user clicked X to close your window
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
