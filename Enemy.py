@@ -53,7 +53,7 @@ class Triangle(Enemy):
         # vertex1 = [centroid[0]-((median*(2/3))*math.)]
 
         for i in range(3):
-            vertexes[i] = [centroid[0] - (median*(2/3)*math.cos(angle_to_origin + ((math.pi/3)*i))), centroid[1] + (median*(2/3)*math.cos(angle_to_origin + ((math.pi/3)*i)))]
+            vertexes[i] = [centroid[0] - (median*(2/3)*math.cos((math.pi/2) - angle_to_origin - ((2*math.pi/3)*i))), centroid[1] + (median*(2/3)*math.cos((0 - (math.pi/2)) + angle_to_origin - ((2*math.pi/3)*i)))]
         
 
         pygame.draw.polygon(screen, pygame.Color(255, 0, 0), vertexes)
