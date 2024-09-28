@@ -3,7 +3,7 @@ class Stage:
     enemies: list[Enemy]
 
     def __init__(self):
-        enemies = []
+        self.enemies = []
 
     
     def spawn_enemy(self, enemy: Enemy):

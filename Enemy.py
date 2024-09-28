@@ -9,7 +9,7 @@ class Enemy:
         self.height = height
 
     def __str__(self) -> str:
-        return f"Enemy [{self.x_pos}, {}, {self.speed}, {self.damage}]"
+        return f"Enemy [{self.x_pos}, {self.y_pos}, {self.speed}, {self.damage}]"
     
     def handle_movement(self) -> None:
         pass
