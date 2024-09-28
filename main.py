@@ -5,7 +5,7 @@ from Stage import Stage
 
 # pygame setup
 pygame.init()
-screen = pygame.display.set_mode((1920, 1080))
+screen = pygame.display.set_mode((1000, 800))
 clock = pygame.time.Clock()
 running = True
 mygame = Game()
@@ -23,7 +23,7 @@ while running:
 
     # RENDER YOUR GAME HERE
     for enemy in mygame.stage.enemies:
-        pygame.draw.rect(screen, pygame.Color(255, 0, 0, 0), pygame.Rect(enemy.x, enemy.y, enemy.width, enemy.height))
+        pygame.draw.rect(screen, pygame.Color(255, 0, 0, 0), pygame.Rect(enemy.x_pos, enemy.y_pos, enemy.width, enemy.height))
 
     # flip() the display to put your work on screen
     pygame.display.flip()
