@@ -3,6 +3,7 @@ from Game import Game
 from Enemy import Enemy
 from Stage import Stage
 
+
 # pygame setup
 pygame.init()
 screen = pygame.display.set_mode((1000, 800))
@@ -29,8 +30,8 @@ while running:
     #*Render all enemies
     for enemy in mygame.stage.enemies:
         enemy.handle_movement(screen.get_width()/2, screen.get_height()/2)
-        pygame.draw.rect(screen, pygame.Color(255, 0, 0, 0), pygame.Rect(enemy.x_pos, enemy.y_pos, enemy.width, enemy.height))
-
+        #pygame.draw.rect(screen, pygame.Color(255, 0, 0, 0), pygame.Rect(enemy.x_pos, enemy.y_pos, enemy.width, enemy.height))
+        enemy.draw(screen)
 
     #*render the crosshairs
 
