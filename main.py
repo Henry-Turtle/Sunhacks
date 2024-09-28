@@ -8,7 +8,8 @@ pygame.init()
 screen = pygame.display.set_mode((1920, 1080))
 clock = pygame.time.Clock()
 running = True
-game = Game()
+mygame = Game()
+mygame.stage.spawn_enemy(Enemy(100.0, 100.0, 50, 50, 50, 50))
 
 while running:
     # poll for events
@@ -21,7 +22,7 @@ while running:
     screen.fill("black")
 
     # RENDER YOUR GAME HERE
-    for enemy in game.stage.enemies:
+    for enemy in mygame.stage.enemies:
         pygame.draw.rect(screen, pygame.Color(255, 0, 0, 0), pygame.Rect(enemy.x, enemy.y, enemy.width, enemy.height))
 
     # flip() the display to put your work on screen
