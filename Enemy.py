@@ -41,7 +41,7 @@ class Triangle(Enemy):
     def draw(self, screen: pygame.Surface, center: tuple, target: tuple):
 
         centroid = (self.x_pos, self.y_pos)
-
+        point1 = ((centroid[0] - target[0]), (centroid[1] - target[1]))
         
 
         pygame.draw.polygon(screen, pygame.Color(255, 0, 0) [vertex1, vertex2, vertex3])
