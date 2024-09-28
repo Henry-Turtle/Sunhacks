@@ -19,8 +19,8 @@ class Enemy:
 
         directionx = (self.x_pos - target[0])/(((self.x_pos**2) + (self.y_pos**2))**0.5)
         directiony = (self.y_pos - target[1])/(((self.x_pos**2) + (self.y_pos**2))**0.5)
-        self.x_pos += self.speed * directionx
-        self.y_pos += self.speed * directiony
+        self.x_pos -= self.speed * directionx
+        self.y_pos -= self.speed * directiony
 
     def draw(self, screen: pygame.Surface, target: tuple):
         pygame.draw.rect(screen, pygame.Color(255, 0, 0), pygame.Rect(self.x_pos - (self.width/2), self.y_pos - (self.height/2), self.width, self.height))
@@ -41,7 +41,7 @@ class Triangle(Enemy):
     def draw(self, screen: pygame.Surface, center: tuple, target: tuple):
 
         centroid = (self.x_pos, self.y_pos)
-
+        point1 = ((centroid[0] - target[0]), (centroid[1] - target[1]))
         
 
         pygame.draw.polygon(screen, pygame.Color(255, 0, 0) [vertex1, vertex2, vertex3])
