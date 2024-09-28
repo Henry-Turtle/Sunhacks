@@ -36,7 +36,7 @@ class Rectangle(Enemy):
         return super().__str__()
 
 
-class Triangle(Enemy):
+class Pentagon(Enemy):
 
     def __str__(self) -> str:
         return f"Enemy [{self.x_pos}, {self.y_pos}, {self.speed_x}, {self.speed_y}, {self.damage}]" 
