@@ -13,8 +13,8 @@ class Enemy:
     
     def handle_movement(self) -> None:
 
-        directionx = -(self.x_pos)/(((self.x_pos**2) + (self.y_pos**2))**0.5)
-        directiony = -(self.y_pos)/(((self.x_pos**2) + (self.y_pos**2))**0.5)
+        directionx = (self.x_pos)/(((self.x_pos**2) + (self.y_pos**2))**0.5)
+        directiony = (self.y_pos)/(((self.x_pos**2) + (self.y_pos**2))**0.5)
         self.x_pos += self.speed * directionx
         self.y_pos += self.speed * directiony
 
