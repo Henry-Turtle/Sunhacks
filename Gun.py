@@ -41,3 +41,15 @@ class MachineGun(Gun):
         self.bullet_size= 5
         self.autofire = True
         self.shoot_delay_ticks = 10
+
+class SniperRifle(Gun):
+    def __init__(self):
+        self.bullet_spread = 0
+        self.bullet_damage = 100
+        self.bullet_speed = 20
+        self.max_ammo = 2
+        self.ammo = 2
+        self.reload_per_tic = 1/60
+        self.bullet_size = 2
+        self.autofire = False
+        self.shoot_delay_ticks = 60

@@ -3,6 +3,7 @@ from Player import Player
 import pygame
 from Bullet import Bullet
 from Enemy import Enemy
+from Gun import *
 
 class Game:
     stage: Stage
@@ -21,6 +22,9 @@ class Game:
     
 
     def shoot(self, mouse_pos: tuple):
+        if (isinstance(self.player.current_gun, SniperRifle)):
+            enemy_rects = [b.getRect() for b in self.stage.enemies]
+            
         if self.player.current_gun.ammo < 1:
             return
         x, y = mouse_pos
