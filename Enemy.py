@@ -1,14 +1,16 @@
 import pygame
-
+from pygame import gfxdraw
 class Enemy:
 
-    def __init__(self, speed: float, dmg: float, x: float, y: float, radius: float, hp: float) -> None:
+    def __init__(self, speed: float, dmg: float, x: float, y: float, width: float, height: float, hp: float) -> None:
         self.speed = speed
         self.damage = dmg
         self.x_pos = x
         self.y_pos = y
-        self.radius = radius
+        self.width = width
+        self.height = height
         self.hp = hp
+        self.TOTAL_HP = hp
 
     def __str__(self) -> str:
         return f"Enemy [{self.x_pos}, {self.y_pos}, {self.speed}, {self.damage}, {self.width}, {self.height}]"
@@ -24,10 +26,19 @@ class Enemy:
         self.y_pos -= self.speed * v[1]
 
     def draw(self, screen: pygame.Surface, target: tuple):
-        pygame.draw.circle(screen, pygame.Color(255, 0, 0), [self.x_pos, self.y_pos], self.radius)
+        color = [85, 85, 85]
+        if self.hp/self.TOTAL_HP > 0.75:
+            color = [255, 0, 0]
+        elif self.hp/self.TOTAL_HP > 0.50:
+            color = [191, 32, 32]
+        elif self.hp/self.TOTAL_HP > 0.25:
+            color = [127, 64, 64]
+        elif self.hp/self.TOTAL_HP > 0:
+            color = [85, 85, 85]
+        pygame.draw.rect(screen, pygame.Color(color[0], color[1], color[2]), pygame.Rect(self.x_pos, self.y_pos, self.width, self.height))
 
     def getRect(self) -> pygame.Rect:
-        return pygame.Rect(self.x_pos - self.radius, self.y_pos - self.radius, self.radius*2, self.radius*2)
+        return pygame.Rect(self.x_pos, self.y_pos, self.width, self.height)
     
     def get_damaged(self, damage: float):
         self.hp -= damage
