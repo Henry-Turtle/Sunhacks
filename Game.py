@@ -144,7 +144,7 @@ class Game:
         for enemy in damaged_enemies:
             self.damage(enemy, self.player.current_gun.bullet_damage)
         
-        self.stage.spawn_temporary_object(SniperTrail(self.center, v, self.player.current_gun.bullet_size))
+        self.stage.spawn_temporary_object(SniperTrail(self.center, v))
 
         pygame.mixer.music.load("sniper.mp3")
         pygame.mixer.music.play()
