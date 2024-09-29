@@ -32,13 +32,13 @@ class Gun:
     def ammo_percentage(self)->float:
         return self.ammo / self.max_ammo
 
-    def draw(screen: pygame.Surface):
+    def draw(self, screen: pygame.Surface):
         mouse_x, mouse_y = pygame.mouse.get_pos()
-
-        pygame.draw.line(screen, pygame.Color(0, 50, 150), mouse_x, mouse_y + 20, 3)
-        pygame.draw.line(screen, pygame.Color(0, 50, 150), mouse_x + 20, mouse_y, 3)
-        pygame.draw.line(screen, pygame.Color(0, 50, 150), mouse_x, mouse_y + 20, 3)
-        pygame.draw.line(screen, pygame.Color(0, 50, 150), mouse_x + 20, mouse_y, 3)
+        
+        pygame.draw.line(screen, pygame.Color(0, 150, 50), [mouse_x, mouse_y-4], [mouse_x, mouse_y-14], 3)
+        pygame.draw.line(screen, pygame.Color(0, 150, 50), [mouse_x, mouse_y+4], [mouse_x, mouse_y+14], 3)
+        pygame.draw.line(screen, pygame.Color(0, 150, 50), [mouse_x-4, mouse_y], [mouse_x-14, mouse_y], 3)
+        pygame.draw.line(screen, pygame.Color(0, 150, 50), [mouse_x+4, mouse_y], [mouse_x+14, mouse_y], 3)
 
 class MachineGun(Gun):
     def __init__(self):
@@ -75,6 +75,11 @@ class Shotgun(Gun):
         self.bullet_size = 6
         self.autofire = False
         self.shoot_delay_ticks = 30
+
+    def draw(self, screen: pygame.Surface):
+        
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+        pygame.draw.circle(screen, pygame.Color(0, 150, 50), [mouse_x, mouse_y], 15, 2)
 
 class GrenadeLauncher(Gun):
     def __init__(self):

@@ -5,6 +5,7 @@ from Stage import Stage
 import math
 from Bullet import *
 from Gun import *
+import sys
 
 class main:
     def __init__(self):
@@ -43,7 +44,10 @@ class main:
     def handle_playing(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                self.running = False
+                pygame.quit()
+                sys.exit()
+
             if event.type == pygame.MOUSEMOTION:
                 self.mouseX, self.mouseY = pygame.mouse.get_pos()
             if event.type == pygame.MOUSEBUTTONDOWN and self.game.player.current_gun.can_fire():
@@ -63,6 +67,7 @@ class main:
         #self.game.player.handle_movement(actions[pygame.K_a], actions[pygame.K_d], actions[pygame.K_w], actions[pygame.K_s])
         if pygame.mouse.get_pressed()[0] and self.game.player.current_gun.autofire and self.game.player.current_gun.can_fire():
             self.game.shoot((self.mouseX, self.mouseY))
+        # self.game.player.current_gun.draw(self.screen)
         # fill the self.screen with a color to wipe away anything from last frame
         self.screen.fill("black")
 
@@ -135,6 +140,7 @@ class main:
         for gun in self.game.player.guns:
             if gun != self.game.player.current_gun:
                 gun.reload()
+        self.game.player.current_gun.draw(self.screen)
         #for tempobj in self.game.stage.temporary_objects:
             #pass
 
@@ -222,6 +228,7 @@ class main:
         pygame.display.flip()
 
     def loop(self):
+        pygame.mouse.set_visible(False)
         while self.running:
             self.clock.tick(60)  # limits FPS to 60
             if self.state == "start":
