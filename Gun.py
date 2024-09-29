@@ -13,4 +13,4 @@ class MachineGun(Gun):
         self.bullet_speed = 1
         self.ammo = 20
         self.reload_per_tick = 0.25
-        self.bullet_size: 5
+        self.bullet_size= 5
