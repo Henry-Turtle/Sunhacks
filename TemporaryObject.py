@@ -20,7 +20,6 @@ class SniperTrail(TemporaryObject):
         self.line = [v[0], -1*v[1]]
         self.pos = start
         self.decay_speed = 150/60
-        self.width = width
 
     def draw(self, screen:pygame.display):
         pygame.draw.line(screen, self.color, self.pos, [self.pos[0]+self.line[0], self.pos[1]+self.line[1]])
