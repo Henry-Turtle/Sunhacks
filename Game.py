@@ -21,6 +21,8 @@ class Game:
     
 
     def shoot(self, mouse_pos: tuple):
+        if self.player.current_gun.ammo < 1:
+            return
         x, y = mouse_pos
         dx = x - self.center[0]
         dy = (y - self.center[1])*-1
@@ -36,6 +38,7 @@ class Game:
                 ))
 
         self.player.current_gun.current_shoot_delay_ticks = self.player.current_gun.shoot_delay_ticks
+        self.player.current_gun.ammo -= 1
 
         
 

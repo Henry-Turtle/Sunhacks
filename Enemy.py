@@ -60,11 +60,14 @@ class Triangle(Enemy):
         # vertexes = [None, None, None]
         # median = self.side*(3**0.5)/2
         angle_to_origin = math.atan((centroid[1] - target[1])/(centroid[0] - target[0]))
+        print(self.x_pos, self.y_pos)
         # # vertex1 = [centroid[0]-((median*(2/3))*math.)]
-        self.triangle_img = pygame.transform.rotate(self.triangle_img, ((math.pi/2) - angle_to_origin + (math.pi))*(180/math.pi))
+        
+        #self.triangle_img = pygame.transform.rotate(self.triangle_img, ((math.pi/2) - angle_to_origin + (math.pi))*(180/math.pi))
+        self.triangle_img = pygame.transform.rotate(self.triangle_img, 361)
         # for i in range(3):
         #     vertexes[i] = [centroid[0] - (median*(2/3)*math.cos((math.pi/2) - angle_to_origin - ((2*math.pi/3)*i))), centroid[1] + (median*(2/3)*math.cos(((math.pi/2)) + angle_to_origin - ((2*math.pi/3)*i)))]
-        screen.blit(self.triangle_img, [self.x_pos - (self.width/2), self.y_pos - (self.triangle_img.get_height()/2)])
+        screen.blit(self.triangle_img, (self.x_pos - (self.width/2), self.y_pos - (self.triangle_img.get_height()/2)))
 
         # pygame.draw.polygon(screen, pygame.Color(255, 0, 0), vertexes)
 
