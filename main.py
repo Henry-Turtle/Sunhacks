@@ -2,7 +2,6 @@ import pygame
 from Game import Game
 from Enemy import *
 from Stage import Stage
-from Bullet import Bullet
 
 
 # pygame setup
@@ -15,7 +14,6 @@ running = True
 game = Game((WIDTH, HEIGHT))
 game.stage.spawn_enemy(Triangle(1, 100.0, 100, 50, 50))
 game.stage.spawn_enemy(Triangle(1, 100.0, 400, 700, 50))
-game.stage.spawn_bullet(Bullet(400, 400, [1,1], 2, 1))
 mouseX, mouseY = pygame.mouse.get_pos()
 CENTER = (WIDTH/2, HEIGHT/2)
 

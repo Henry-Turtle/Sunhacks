@@ -1,6 +1,5 @@
 from Stage import Stage
 from Player import Player
-from Bullet import Bullet
 import pygame
 
 class Game:
@@ -28,12 +27,12 @@ class Game:
 
         v = [(dx/magnitude), (dy/magnitude)]
 
-        self.stage.spawn_bullet(Bullet(
-            v[0]*self.bullet_spawn_radius+self.center[0],
-              v[1]*self.bullet_spawn_radius*-1+self.center[1],
-                v, self.player.current_gun.bullet_speed,
-                  self.player.current_gun.bullet_damage))
-        print(v)
+        self.stage.spawn_bullet(self.player.create_bullet(
+                v[0]*self.bullet_spawn_radius+self.center[0],
+                v[1]*self.bullet_spawn_radius*-1+self.center[1],
+                v
+                ))
+
 
         
 
