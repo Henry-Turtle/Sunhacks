@@ -61,5 +61,5 @@ class GrenadeBullet(Bullet):
         self.damage = damage
 
         self.ticks_loaded = 0
-        self.explosion_radius = 50
+        self.explosion_radius = 100
         self.type = "grenade"

@@ -62,6 +62,7 @@ while running:
     #*render the homebase
     pygame.draw.rect(screen, pygame.Color("green"), pygame.Rect(WIDTH/2 - 15, HEIGHT/2 - 15, 30, 30))
 
+    game.spawn_enemies()
     #*Render all enemies
     for enemy in game.stage.enemies:
         game.stage.handle_enemy_movement(enemy, CENTER)
@@ -117,6 +118,8 @@ while running:
 
     # flip() the display to put your work on screen
     pygame.display.flip()
+    game.ticks+=1
+
     
     clock.tick(60)  # limits FPS to 60
 

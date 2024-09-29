@@ -2,7 +2,7 @@ from Stage import Stage
 from Player import Player
 import pygame
 from Bullet import *
-from Enemy import Enemy
+from Enemy import *
 from Gun import *
 from TemporaryObject import *
 import math
@@ -14,6 +14,9 @@ class Game:
     player: Player
     center: list[int, int]
     bullet_spawn_radius: int
+    ticks: int
+    seconds: int
+    enemy_list = [Rectangle, EnemySpiral]
     
     def __init__(self, dimensions: tuple[int]):
         self.stage = Stage()
@@ -23,7 +26,40 @@ class Game:
         self.center = [x/2, y/2]
 
         self.bullet_spawn_radius = 30
+        self.seconds = 0
+        self.ticks = 0
     
+    def spawn_enemies(self):
+        rand = random.Random()
+        enemy: Enemy = self.enemy_list[random.randint(0, len(self.enemy_list)-1)]
+        speed: float = (random.random())*(1+self.seconds/30)
+        hp: float = (random.random()+1)*(30+self.seconds/15)
+        dmg: float = (random.random()+1)*(30+self.seconds/15)
+        size:float = (random.random())*30+30
+        if self.ticks != 60:
+            return
+        self.ticks = 0
+        self.seconds += 1
+        num_enemies = int(self.seconds/60) + 1
+        for i in range(num_enemies):
+            side = (1 if random.randint(1, 2) == 1 else -1)
+            parity = (1 if random.randint(1,2)==1 else -1)
+            if side == 1:#Will spawn on left or right
+                if parity == 1:#will spawn on left
+                    self.stage.spawn_enemy(enemy(speed, dmg, -50-size, random.random()*self.center[1]*2, size, size, hp))
+                else:#will spawn on right
+                    self.stage.spawn_enemy(enemy(speed, dmg, self.center[0]*2+50+size, random.random()*self.center[1]*2, size, size, hp))
+            else:#Will spawn on top or bottom
+                if parity == 1:#Will spawn on bottom
+                    self.stage.spawn_enemy(enemy(speed, dmg, random.random()*self.center[0]*2, -50-size, size, size, hp))
+                else: #Will spawn on bottom
+                    self.stage.spawn_enemy(enemy(speed, dmg, random.random()*self.center[0]*2, self.center[1]*2+50, size, size, hp))
+
+
+
+
+        
+        
 
     def shoot(self, mouse_pos: tuple):
         if not self.player.current_gun.can_fire():
@@ -125,17 +161,16 @@ class Game:
 
 
     def do_collisions(self):
-        enemy_rects:tuple[pygame.Rect] = [e.getRect() for e in self.stage.enemies]
-        enemystack:tuple[Enemy] = []
         for bullet in self.stage.bullets:
+            enemystack:tuple[Enemy] = []
+            enemy_rects:tuple[pygame.Rect] = [e.getRect() for e in self.stage.enemies]
             damaged_enemies: tuple = bullet.get_rect().collidelistall(enemy_rects)
             if len(damaged_enemies) > 0:
                 self.destroy_bullet(bullet)
             for enemy_index in damaged_enemies:
                 enemystack.append(self.stage.enemies[enemy_index])
-
-        for enemy in enemystack:   
-            self.damage(enemy, bullet.damage)
+            for enemy in enemystack:   
+                self.damage(enemy, bullet.damage)
 
 
     def destroy_enemy(self, enemy: Enemy)->None:
