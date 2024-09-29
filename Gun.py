@@ -26,7 +26,7 @@ class MachineGun(Gun):
         self.bullet_damage = 1
         self.bullet_speed = 7
         self.ammo = 20
-        self.reload_per_tick = 0.25
+        self.reload_per_tick = 1/30
         self.bullet_size= 5
         self.autofire = True
         self.shoot_delay_ticks = 10
