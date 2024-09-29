@@ -69,7 +69,7 @@ class Triangle(Enemy):
         # pygame.draw.polygon(screen, pygame.Color(255, 0, 0), vertexes)
 
     def getRect(self) -> pygame.Rect:
-        return pygame.Rect(self.x_pos - self.width/2, self.y_pos - self.height/2, 2*(((self.width/2)**2)+((self.height/2)**2)**0.5))
+        return pygame.Rect(self.x_pos - self.width/2, self.y_pos - self.height/2, 2*(((self.width/2)**2)+((self.height/2)**2)**0.5), 2*(((self.width/2)**2)+((self.height/2)**2)**0.5))
         
 
 
