@@ -1,4 +1,5 @@
 import pygame, math
+from pygame import gfxdraw
 
 class Enemy:
 
@@ -37,7 +38,7 @@ class Enemy:
 
 class Triangle(Enemy):
 
-    def __init__(self, speed: float, dmg: float, x: float, y: float, side: float) -> None:
+    def __init__(self, speed: float, dmg: float, x: float, y: float, side: float, pointless: float) -> None:
         self.speed = speed
         self.damage = dmg
         self.x_pos = x
@@ -61,9 +62,9 @@ class Triangle(Enemy):
         
 
         triangle_img = pygame.image.load("Untitled.png")
-        triangle_img = pygame.transform.rotate(triangle_img, math.pi+angle_to_origin)
-        triangle_img = pygame.transform.scale_by(triangle_img, 0.33)
-        screen.blit(triangle_img, [self.x_pos, self.y_pos])
+        triangle_img = pygame.transform.rotate(triangle_img, ((math.pi/2) - angle_to_origin + (math.pi))*(180/math.pi))
+        triangle_img = pygame.transform.scale_by(triangle_img, 0.02)
+        screen.blit(triangle_img, [self.x_pos - (triangle_img.get_width()/2), self.y_pos - (triangle_img.get_height()/2)])
 
         # pygame.draw.polygon(screen, pygame.Color(255, 0, 0), vertexes)
         
