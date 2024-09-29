@@ -3,6 +3,7 @@ from Game import Game
 from Enemy import *
 from Stage import Stage
 import math
+from Bullet import *
 
 
 # pygame setup
@@ -19,12 +20,8 @@ mouseX, mouseY = pygame.mouse.get_pos()
 CENTER = (WIDTH/2, HEIGHT/2)
 BOX_SIZE = 40
 BOX_SPACE = 25
-for i in range(100):
-    game.stage.spawn_bullet(game.player.create_bullet(500, 500, [math.sin(i),math.cos(i)]))
 
 
-def intersection(lst1, lst2):
-    return list(set(lst1) & set(lst2))
 
 
 
@@ -57,7 +54,10 @@ while running:
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("black")
 
+    game.do_collisions()
     # RENDER YOUR GAME HERE
+
+    
 
     #*render the homebase
     pygame.draw.rect(screen, pygame.Color("green"), pygame.Rect(WIDTH/2 - 15, HEIGHT/2 - 15, 30, 30))
@@ -69,13 +69,30 @@ while running:
         enemy.draw(screen, CENTER)
 
     
-    #*Render all bullets
+    #*Render and process all bullets
 
     for bullet in game.stage.bullets:
         bullet.handle_movement()
+        if bullet.pos_x > WIDTH or bullet.pos_x < 0 or bullet.pos_y < 0 or bullet.pos_y > HEIGHT:
+            game.stage.bullets.remove(bullet)
+        if bullet.type == "grenade":
+            bullet.ticks_loaded += 1
+            if bullet.ticks_loaded > 180:
+                game.explode_grenade(bullet)
+            bullet.speed = math.e **(2-bullet.ticks_loaded/30)
+        elif bullet.type == "shotgun":
+            bullet.ticks_loaded += 1
         bullet.draw(screen)
 
-    game.do_collisions()
+    
+
+    for obj in game.stage.temporary_objects:
+        obj.draw(screen)
+        game.stage.decay_temporary_object(obj)
+    
+
+    
+
 
     #* Draw the UI
     for i in range(len(game.player.guns)):
@@ -100,7 +117,7 @@ while running:
 
     # flip() the display to put your work on screen
     pygame.display.flip()
-
+    
     clock.tick(60)  # limits FPS to 60
 
 pygame.quit()

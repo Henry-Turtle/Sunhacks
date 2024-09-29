@@ -1,45 +1,36 @@
+import pygame
 class TemporaryObject:
-    color: tuple[int, int, int]
-    speed: int
+    color: list[int, int, int]
+    decay_speed: float
+    pos: list[float, float]
     def __init__(self):
         color = (255, 255, 255)
     
     def draw(self, screen):
         pass
     
-    def tick_down(self):
-        pass
+
+
 
 class SniperTrail(TemporaryObject):
-    
- def __init__(self, color=(255, 255, 255), speed=0):
-        super().__init__(color, speed)
-        # SniperTrail specific initialization, if any
-        pass
-        
-        
-class ChainSaw(TemporaryObject):
-    
-    def __init__(self, color=(245, 245, 245), speed=0):
-        super().__init__(color, speed)
-    # SniperTrail specific initialization, if any
-    pass
+    line: list[float, float]
+    def __init__(self, start: list[float, float], v: list[float, float]):
+        self.color = (150, 150, 150)
+        self.line = [v[0], -1*v[1]]
+        self.pos = start
+        self.decay_speed = 150/60
 
+    def draw(self, screen:pygame.display):
+        pygame.draw.line(screen, self.color, self.pos, [self.pos[0]+self.line[0], self.pos[1]+self.line[1]])
 
-class JackHammer(TemporaryObject):
-    
-    def __init__(self, color=(235, 235, 235), speed=0):
-        super().__init__(color, speed)
-    # SniperTrail specific initialization, if any
-    pass
-    
-    
-    class ShortGun(TemporaryObject):
         
-        def __init__(self, color=(225, 225, 225), speed=0):
-            super().__init__(color, speed)
-    # SniperTrail specific initialization, if any
-    pass
-    
-    
-    
+class GrenadeExplosion(TemporaryObject):
+    radius: float
+    def __init__(self, position: list[float, float], radius: float):
+        self.pos = position
+        self.radius = radius
+        self.color = (255, 255, 255)
+        self.decay_speed = 255/60
+
+    def draw(self, screen: pygame.display):
+        pygame.draw.circle(screen, self.color, self.pos, self.radius)

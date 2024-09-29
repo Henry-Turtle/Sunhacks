@@ -19,7 +19,7 @@ class Gun:
         if self.ammo < self.max_ammo:
             self.ammo += self.reload_per_tick
             return
-        if self.ammo < self.max_ammo:
+        if self.ammo > self.max_ammo:
             self.ammo = self.max_ammo
             return
         return
@@ -49,9 +49,31 @@ class SniperRifle(Gun):
         self.bullet_speed = 20
         self.max_ammo = 2
         self.ammo = 2
-        self.reload_per_tic = 1/60
+        self.reload_per_tick = 1/240
         self.bullet_size = 2
         self.autofire = False
         self.shoot_delay_ticks = 60
-        self.redcircle = 20
-    
+
+class Shotgun(Gun):
+    def __init__(self):
+        self.bullet_spread = 0.5
+        self.bullet_speed = 10
+        self.bullet_damage = 30
+        self.max_ammo = 4
+        self.ammo = 4
+        self.reload_per_tick = 1/120
+        self.bullet_size = 6
+        self.autofire = False
+        self.shoot_delay_ticks = 30
+
+class GrenadeLauncher(Gun):
+    def __init__(self):
+        self.bullet_spread = 0
+        self.bullet_speed = 10
+        self.bullet_damage = 80
+        self.max_ammo = 5
+        self.ammo = 5
+        self.reload_per_tick = 1/150
+        self.bullet_size = 10
+        self.autofire = False
+        self.shoot_delay_ticks = 20
