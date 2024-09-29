@@ -24,3 +24,6 @@ class Bullet:
     def handle_movement(self):
         self.pos_x += self.direction[0]*self.speed
         self.pos_y += self.direction[1]*self.speed
+
+    def get_rect(self)-> pygame.Rect:
+        return pygame.Rect(self.pos_x - self.size/2, self.pos_y-self.size/2, self.size, self.size)

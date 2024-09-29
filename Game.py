@@ -1,6 +1,8 @@
 from Stage import Stage
 from Player import Player
 import pygame
+from Bullet import Bullet
+from Enemy import Enemy
 
 class Game:
     stage: Stage
@@ -38,7 +40,19 @@ class Game:
 
 
     def do_collisions(self):
-        enemy_rects = [e.getRect() for e in self.stage.enemies]
+        enemy_rects:tuple[pygame.Rect] = [e.getRect() for e in self.stage.enemies]
+        bullet_rects: tuple[pygame.Rect] = [b.get_rect for b in self.stage.bullets]\
+        
+        for bullet in bullet_rects:
+            damaged_enemies: tuple = bullet.collidelistall(enemy_rects)
+            for enemy_index in damaged_enemies:
+                damaged_enemies[enemy_index].damage(bullet.damage)
+                self.destroy(bullet)
         damaged_enemies = self.player.getCrosshair().collidelistall(enemy_rects)
         print(len(damaged_enemies))
 
+        def destroy(bullet: Bullet)->None:
+            self.stage.bullets.remove(bullet)
+
+        def destroy(enemy: Enemy)->None:
+            self.stage.enemies.remove(enemy)
