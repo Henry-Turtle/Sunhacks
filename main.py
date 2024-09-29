@@ -12,13 +12,13 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 running = True
 game = Game((WIDTH, HEIGHT))
-game.stage.spawn_enemy(Rectangle(1, 100.0, 100, 50, 50, 50))
+game.stage.spawn_enemy(Triangle(1, 100.0, 100, 50, 50, 50))
 game.stage.spawn_enemy(Rectangle(1, 100.0, 400, 700, 50, 50))
 mouseX, mouseY = pygame.mouse.get_pos()
 CENTER = (WIDTH/2, HEIGHT/2)
 
 while running:
-
+    fired = False
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
     for event in pygame.event.get():
@@ -26,8 +26,9 @@ while running:
             running = False
         if event.type == pygame.MOUSEMOTION:
             mouseX, mouseY = pygame.mouse.get_pos()
-        if event.type == pygame.MOUSEBUTTONDOWN and not game.player.current_gun.autofire:
+        if event.type == pygame.MOUSEBUTTONDOWN:
             game.shoot((mouseX, mouseY))
+            fired = True
 
     if pygame.mouse.get_pressed()[0] and game.player.current_gun.autofire:
         game.shoot((mouseX, mouseY))
@@ -56,6 +57,8 @@ while running:
     game.do_collisions()
 
 
+    #*Handle any misc operations
+    game.player.current_gun.delay_down()
 
     
 
