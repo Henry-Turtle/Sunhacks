@@ -2,8 +2,6 @@ import pygame
 
 class Enemy:
 
-    side = 0
-
     def __init__(self, speed: float, dmg: float, x: float, y: float, radius: float, hp: float) -> None:
         self.speed = speed
         self.damage = dmg
@@ -26,7 +24,7 @@ class Enemy:
         self.y_pos -= self.speed * v[1]
 
     def draw(self, screen: pygame.Surface, target: tuple):
-        pygame.draw.circle(screen, pygame.Color(255, 0, 0), self.radius)
+        pygame.draw.circle(screen, pygame.Color(255, 0, 0), [self.x_pos, self.y_pos], self.radius)
 
     def getRect(self) -> pygame.Rect:
         return pygame.Rect(self.x_pos, self.y_pos, self.radius*2, self.radius*2)
