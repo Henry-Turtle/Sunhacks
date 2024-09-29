@@ -92,3 +92,8 @@ class GrenadeLauncher(Gun):
         self.bullet_size = 10
         self.autofire = False
         self.shoot_delay_ticks = 20
+
+    def draw(self, screen: pygame.Surface):
+    
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+        pygame.draw.rect(screen, pygame.Color(0, 150, 50, 0), pygame.Rect(mouse_x-15, mouse_y-15, 30, 30), 2)
