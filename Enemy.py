@@ -3,6 +3,7 @@ import pygame, math
 class Enemy:
 
     side = 0
+    hp: float = 1
 
     def __init__(self, speed: float, dmg: float, x: float, y: float, width: float, height: float) -> None:
         self.speed = speed
@@ -30,6 +31,9 @@ class Enemy:
 
     def getRect(self) -> pygame.Rect:
         return pygame.Rect(self.x_pos, self.y_pos, self.width, self.height)
+    
+    def damage(self, damage: int):
+        self.hp -= damage
 
 class Triangle(Enemy):
 

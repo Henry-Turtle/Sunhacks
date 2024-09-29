@@ -12,8 +12,8 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 running = True
 game = Game((WIDTH, HEIGHT))
-game.stage.spawn_enemy(Triangle(1, 100.0, 100, 50, 50))
-game.stage.spawn_enemy(Triangle(1, 100.0, 400, 700, 50))
+game.stage.spawn_enemy(Rectangle(1, 100.0, 100, 50, 50, 50))
+game.stage.spawn_enemy(Rectangle(1, 100.0, 400, 700, 50, 50))
 mouseX, mouseY = pygame.mouse.get_pos()
 CENTER = (WIDTH/2, HEIGHT/2)
 
@@ -26,9 +26,11 @@ while running:
             running = False
         if event.type == pygame.MOUSEMOTION:
             mouseX, mouseY = pygame.mouse.get_pos()
-        if event.type == pygame.MOUSEBUTTONDOWN:
+        if event.type == pygame.MOUSEBUTTONDOWN and not game.player.current_gun.autofire:
             game.shoot((mouseX, mouseY))
 
+    if pygame.mouse.get_pressed()[0] and game.player.current_gun.autofire:
+        game.shoot((mouseX, mouseY))
 
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("black")
@@ -50,6 +52,8 @@ while running:
     for bullet in game.stage.bullets:
         bullet.handle_movement()
         bullet.draw(screen)
+
+    game.do_collisions()
 
 
 

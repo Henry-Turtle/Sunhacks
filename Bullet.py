@@ -16,10 +16,11 @@ class Bullet:
         magnitude = (direction[0]**2 + direction[1]**2)**0.5
         self.direction = [direction[0]/magnitude, -1*direction[1]/magnitude]
 
-        self.bullet_size = bullet_size
+        self.size = bullet_size
+        self.damage = damage
 
     def draw(self, screen: pygame.Surface):
-        pygame.draw.circle(screen, pygame.Color("white"), (self.pos_x, self.pos_y), self.bullet_size)
+        pygame.draw.circle(screen, pygame.Color("white"), (self.pos_x, self.pos_y), self.size)
 
     def handle_movement(self):
         self.pos_x += self.direction[0]*self.speed
