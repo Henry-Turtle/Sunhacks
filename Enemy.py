@@ -1,18 +1,16 @@
-import pygame, math
-from pygame import gfxdraw
+import pygame
 
 class Enemy:
 
     side = 0
-    hp: float = 1
 
-    def __init__(self, speed: float, dmg: float, x: float, y: float, width: float, height: float) -> None:
+    def __init__(self, speed: float, dmg: float, x: float, y: float, radius: float, hp: float) -> None:
         self.speed = speed
         self.damage = dmg
         self.x_pos = x
         self.y_pos = y
-        self.width = width
-        self.height = height
+        self.radius = radius
+        self.hp = hp
 
     def __str__(self) -> str:
         return f"Enemy [{self.x_pos}, {self.y_pos}, {self.speed}, {self.damage}, {self.width}, {self.height}]"
@@ -28,60 +26,17 @@ class Enemy:
         self.y_pos -= self.speed * v[1]
 
     def draw(self, screen: pygame.Surface, target: tuple):
-        pygame.draw.rect(screen, pygame.Color(255, 0, 0), pygame.Rect(self.x_pos, self.y_pos, self.width, self.height))
+        pygame.draw.circle(screen, pygame.Color(255, 0, 0), self.radius)
 
     def getRect(self) -> pygame.Rect:
-        return pygame.Rect(self.x_pos, self.y_pos, self.width, self.height)
+        return pygame.Rect(self.x_pos, self.y_pos, self.radius*2, self.radius*2)
     
-    def damage(self, damage: int):
+    def get_damaged(self, damage: float):
         self.hp -= damage
 
-class Triangle(Enemy):
+# class Triangle(Enemy):
 
-    def __init__(self, speed: float, dmg: float, x: float, y: float, side: float, pointless: float) -> None:
-        self.speed = speed
-        self.damage = dmg
-        self.x_pos = x
-        self.y_pos = y
-        self.side = side
-
-        self.triangle_img = pygame.image.load("Untitled.png")
-        self.triangle_img = pygame.transform.scale_by(self.triangle_img, 0.02)
-        self.width = self.triangle_img.get_width()/2
-        self.height = self.triangle_img.get_height()/2
-
-    def __str__(self) -> str:
-        return f"Triangle [{self.x_pos}, {self.y_pos}, {self.speed}, {self.damage}]"
-    
-    def draw(self, screen: pygame.Surface, target: tuple):
-
-        centroid = (self.x_pos, self.y_pos)
-        # # distance = ((self.x_pos**2)+(self.y_pos**2))**0.5
-        # vertexes = [None, None, None]
-        # median = self.side*(3**0.5)/2
-        angle_to_origin = math.atan((centroid[1] - target[1])/(centroid[0] - target[0]))
-        # # vertex1 = [centroid[0]-((median*(2/3))*math.)]
-        self.triangle_img = pygame.transform.rotate(self.triangle_img, ((math.pi/2) - angle_to_origin + (math.pi))*(180/math.pi))
-        # for i in range(3):
-        #     vertexes[i] = [centroid[0] - (median*(2/3)*math.cos((math.pi/2) - angle_to_origin - ((2*math.pi/3)*i))), centroid[1] + (median*(2/3)*math.cos(((math.pi/2)) + angle_to_origin - ((2*math.pi/3)*i)))]
-        screen.blit(self.triangle_img, [self.x_pos - (self.width/2), self.y_pos - (self.triangle_img.get_height()/2)])
-
-        # pygame.draw.polygon(screen, pygame.Color(255, 0, 0), vertexes)
-
-    def getRect(self) -> pygame.Rect:
-        return pygame.Rect(self.x_pos - self.width/2, self.y_pos - self.height/2, 2*(((self.width/2)**2)+((self.height/2)**2)**0.5), 2*(((self.width/2)**2)+((self.height/2)**2)**0.5))
-        
-
-
-class Rectangle(Enemy):
-
-    def __str__(self) -> str:
-        return super().__str__()
-
-
-# class Pentagon(Enemy):
-
-#     def __init__(self, speed: float, dmg: float, x: float, y: float, side: float) -> None:
+#     def __init__(self, speed: float, dmg: float, x: float, y: float, side: float, pointless: float) -> None:
 #         self.speed = speed
 #         self.damage = dmg
 #         self.x_pos = x
@@ -89,4 +44,47 @@ class Rectangle(Enemy):
 #         self.side = side
 
 #     def __str__(self) -> str:
-#         return f"Enemy [{self.x_pos}, {self.y_pos}, {self.speed}, {self.damage}]" 
+#         return f"Triangle [{self.x_pos}, {self.y_pos}, {self.speed}, {self.damage}]"
+    
+#     def draw(self, screen: pygame.Surface, target: tuple):
+
+#         centroid = (self.x_pos, self.y_pos)
+#         # # distance = ((self.x_pos**2)+(self.y_pos**2))**0.5
+#         # vertexes = [None, None, None]
+#         # median = self.side*(3**0.5)/2
+#         angle_to_origin = math.atan((centroid[1] - target[1])/(centroid[0] - target[0]))
+#         # # vertex1 = [centroid[0]-((median*(2/3))*math.)]
+
+#         # for i in range(3):
+#         #     vertexes[i] = [centroid[0] - (median*(2/3)*math.cos((math.pi/2) - angle_to_origin - ((2*math.pi/3)*i))), centroid[1] + (median*(2/3)*math.cos(((math.pi/2)) + angle_to_origin - ((2*math.pi/3)*i)))]
+        
+
+#         triangle_img = pygame.image.load("Untitled.png")
+#         triangle_img = pygame.transform.rotate(triangle_img, ((math.pi/2) - angle_to_origin + (math.pi))*(180/math.pi))
+#         triangle_img = pygame.transform.scale_by(triangle_img, 0.02)
+#         screen.blit(triangle_img, [self.x_pos - (triangle_img.get_width()/2), self.y_pos - (triangle_img.get_height()/2)])
+
+#         # pygame.draw.polygon(screen, pygame.Color(255, 0, 0), vertexes)
+
+#     def getRect(self) -> pygame.Rect:
+#         return pygame()
+        
+
+
+# class Rectangle(Enemy):
+
+#     def __str__(self) -> str:
+#         return super().__str__()
+
+
+# # class Pentagon(Enemy):
+
+# #     def __init__(self, speed: float, dmg: float, x: float, y: float, side: float) -> None:
+# #         self.speed = speed
+# #         self.damage = dmg
+# #         self.x_pos = x
+# #         self.y_pos = y
+# #         self.side = side
+
+# #     def __str__(self) -> str:
+# #         return f"Enemy [{self.x_pos}, {self.y_pos}, {self.speed}, {self.damage}]" 
