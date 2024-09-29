@@ -14,7 +14,7 @@ clock = pygame.time.Clock()
 running = True
 game = Game((WIDTH, HEIGHT))
 game.stage.spawn_enemy(Rectangle(1, 100.0, 100, 50, 25, 50, 100))
-#game.stage.spawn_enemy(Enemy(1, 100.0, 400, 700, 25, 50))
+game.stage.spawn_enemy(EnemySpiral(1, 100.0, 400, 700, 25, 50, 100))
 mouseX, mouseY = pygame.mouse.get_pos()
 CENTER = (WIDTH/2, HEIGHT/2)
 BOX_SIZE = 40

@@ -25,7 +25,7 @@ class Gun:
         return
     
     def can_fire(self)->bool:
-        return self.current_shoot_delay_ticks == 0
+        return self.current_shoot_delay_ticks == 0 and self.ammo >= 1
     
     def ammo_percentage(self)->float:
         return self.ammo / self.max_ammo
@@ -53,3 +53,5 @@ class SniperRifle(Gun):
         self.bullet_size = 2
         self.autofire = False
         self.shoot_delay_ticks = 60
+        self.redcircle = 20
+    
