@@ -40,6 +40,11 @@ class Triangle(Enemy):
         self.x_pos = x
         self.y_pos = y
         self.side = side
+        self.width = self.triangle_img.get_width()/2
+        self.height = self.triangle_img.get_height()/2
+
+        self.triangle_img = pygame.image.load("Untitled.png")
+        self.triangle_img = pygame.transform.scale_by(self.triangle_img, 0.02)
 
     def __str__(self) -> str:
         return f"Triangle [{self.x_pos}, {self.y_pos}, {self.speed}, {self.damage}]"
@@ -52,17 +57,15 @@ class Triangle(Enemy):
         # median = self.side*(3**0.5)/2
         angle_to_origin = math.atan((centroid[1] - target[1])/(centroid[0] - target[0]))
         # # vertex1 = [centroid[0]-((median*(2/3))*math.)]
-
+        self.triangle_img = pygame.transform.rotate(self.triangle_img, ((math.pi/2) - angle_to_origin + (math.pi))*(180/math.pi))
         # for i in range(3):
         #     vertexes[i] = [centroid[0] - (median*(2/3)*math.cos((math.pi/2) - angle_to_origin - ((2*math.pi/3)*i))), centroid[1] + (median*(2/3)*math.cos(((math.pi/2)) + angle_to_origin - ((2*math.pi/3)*i)))]
-        
-
-        triangle_img = pygame.image.load("Untitled.png")
-        triangle_img = pygame.transform.rotate(triangle_img, ((math.pi/2) - angle_to_origin + (math.pi))*(180/math.pi))
-        triangle_img = pygame.transform.scale_by(triangle_img, 0.02)
-        screen.blit(triangle_img, [self.x_pos - (triangle_img.get_width()/2), self.y_pos - (triangle_img.get_height()/2)])
+        screen.blit(self.triangle_img, [self.x_pos - (self.width/2), self.y_pos - (self.triangle_img.get_height()/2)])
 
         # pygame.draw.polygon(screen, pygame.Color(255, 0, 0), vertexes)
+
+    def getRect(self) -> pygame.Rect:
+        return pygame.Rect(self.x_pos - self.width/2, self.y_pos - self.height/2, 2*(((self.width/2)**2)+((self.height/2)**2)**0.5))
         
 
 
