@@ -1,3 +1,5 @@
+import pygame
+
 class Gun:
     bullet_speed: float
     bullet_damage: float #How many radians in either idrection the bullet can spread
@@ -29,6 +31,14 @@ class Gun:
     
     def ammo_percentage(self)->float:
         return self.ammo / self.max_ammo
+
+    def draw(screen: pygame.Surface):
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+
+        pygame.draw.line(screen, pygame.Color(0, 50, 150), mouse_x, mouse_y + 20, 3)
+        pygame.draw.line(screen, pygame.Color(0, 50, 150), mouse_x + 20, mouse_y, 3)
+        pygame.draw.line(screen, pygame.Color(0, 50, 150), mouse_x, mouse_y + 20, 3)
+        pygame.draw.line(screen, pygame.Color(0, 50, 150), mouse_x + 20, mouse_y, 3)
 
 class MachineGun(Gun):
     def __init__(self):
