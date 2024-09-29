@@ -228,16 +228,19 @@ class main:
         pygame.display.flip()
 
     def loop(self):
-        pygame.mouse.set_visible(False)
         while self.running:
             self.clock.tick(60)  # limits FPS to 60
             if self.state == "start":
+                pygame.mouse.set_visible(False)
                 self.handle_start()
             elif self.state == "playing":
+                pygame.mouse.set_visible(False)
                 self.handle_playing()
             elif self.state == "gameover":
+                pygame.mouse.set_visible(True)
                 self.handle_gameover()
             elif self.state == "skilltree":
+                pygame.mouse.set_visible(True)
                 self.handle_skilltree()
 
         # poll for events
