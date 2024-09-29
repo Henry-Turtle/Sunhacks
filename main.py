@@ -2,6 +2,7 @@ import pygame
 from Game import Game
 from Enemy import *
 from Stage import Stage
+from Bullet import Bullet
 
 
 # pygame setup
@@ -11,8 +12,10 @@ HEIGHT = 800
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 running = True
-game = Game()
-game.stage.spawn_enemy(Triangle(5, 100.0, 100, 50, 50))
+game = Game((WIDTH, HEIGHT))
+game.stage.spawn_enemy(Triangle(1, 100.0, 100, 50, 50))
+game.stage.spawn_enemy(Triangle(1, 100.0, 400, 700, 50))
+game.stage.spawn_bullet(Bullet(400, 400, [1,1], 2, 1))
 mouseX, mouseY = pygame.mouse.get_pos()
 CENTER = (WIDTH/2, HEIGHT/2)
 
@@ -26,8 +29,7 @@ while running:
         if event.type == pygame.MOUSEMOTION:
             mouseX, mouseY = pygame.mouse.get_pos()
         if event.type == pygame.MOUSEBUTTONDOWN:
-            
-            game.shoot()
+            game.shoot((mouseX, mouseY))
 
 
     # fill the screen with a color to wipe away anything from last frame
@@ -35,15 +37,25 @@ while running:
 
     # RENDER YOUR GAME HERE
 
+    #*render the homebase
+    pygame.draw.rect(screen, pygame.Color("green"), pygame.Rect(WIDTH/2 - 15, HEIGHT/2 - 15, 30, 30))
+
     #*Render all enemies
     for enemy in game.stage.enemies:
         enemy.handle_movement(CENTER)
         #pygame.draw.rect(screen, pygame.Color(255, 0, 0, 0), pygame.Rect(enemy.x_pos, enemy.y_pos, enemy.width, enemy.height))
         enemy.draw(screen, CENTER)
 
-    #*render the crosshairs
+    
+    #*Render all bullets
 
-    pygame.draw.rect(screen, pygame.Color("blue"), game.player.getCrosshair((mouseX, mouseY)), 2)
+    for bullet in game.stage.bullets:
+        bullet.handle_movement()
+        bullet.draw(screen)
+
+
+
+    
 
 
 

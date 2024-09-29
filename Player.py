@@ -1,9 +1,13 @@
 import pygame
+from Gun import *
 class Player:
+    current_gun: Gun
+    guns: list[Gun]
+
     def __init__(self):
-        pass
+        self.guns = []
+        self.guns.append(MachineGun())
+
+        self.current_gun = self.guns[0]
     
-    def getCrosshair(self, cursor: tuple[int]) -> pygame.Rect:
-        x, y = cursor
-        return pygame.Rect(x-10, y-10, 20, 20)
 
