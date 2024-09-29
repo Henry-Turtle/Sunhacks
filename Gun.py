@@ -7,16 +7,18 @@ class Gun:
     bullet_size: int
     autofire: bool
     shoot_delay_ticks: int
-    current_shoot_delay_ticks: int
+    current_shoot_delay_ticks: int = 0
 
     def shoot_delay_tick_down(self):
-        if self.current_shoot_delay_ticks == 0:
-            self.current_shoot_delay_ticks = self.shoot_delay_ticks
+        if self.current_shoot_delay_ticks > 0:
+            self.current_shoot_delay_ticks -= 1
             return
-        self.current_shoot_delay_ticks -= 1
 
     def reload(self):
         self.ammo += self.reload_per_tick
+    
+    def can_fire(self)->bool:
+        return self.current_shoot_delay_ticks == 0
 
 class MachineGun(Gun):
     def __init__(self):
@@ -27,4 +29,4 @@ class MachineGun(Gun):
         self.reload_per_tick = 0.25
         self.bullet_size= 5
         self.autofire = True
-        self.fire_delay = 10
+        self.shoot_delay_ticks = 10

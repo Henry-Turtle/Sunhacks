@@ -18,7 +18,7 @@ mouseX, mouseY = pygame.mouse.get_pos()
 CENTER = (WIDTH/2, HEIGHT/2)
 
 while running:
-    fired = False
+
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
     for event in pygame.event.get():
@@ -26,11 +26,11 @@ while running:
             running = False
         if event.type == pygame.MOUSEMOTION:
             mouseX, mouseY = pygame.mouse.get_pos()
-        if event.type == pygame.MOUSEBUTTONDOWN:
+        if event.type == pygame.MOUSEBUTTONDOWN and game.player.current_gun.can_fire():
             game.shoot((mouseX, mouseY))
             fired = True
 
-    if pygame.mouse.get_pressed()[0] and game.player.current_gun.autofire:
+    if pygame.mouse.get_pressed()[0] and game.player.current_gun.autofire and game.player.current_gun.can_fire():
         game.shoot((mouseX, mouseY))
 
     # fill the screen with a color to wipe away anything from last frame
@@ -58,7 +58,7 @@ while running:
 
 
     #*Handle any misc operations
-    game.player.current_gun.delay_down()
+    game.player.current_gun.shoot_delay_tick_down()
 
     
 

@@ -35,6 +35,7 @@ class Game:
                 v
                 ))
 
+        self.player.current_gun.current_shoot_delay_ticks = self.player.current_gun.shoot_delay_ticks
 
         
 
