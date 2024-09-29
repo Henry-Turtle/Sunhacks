@@ -27,7 +27,7 @@ class Enemy:
         pygame.draw.circle(screen, pygame.Color(255, 0, 0), [self.x_pos, self.y_pos], self.radius)
 
     def getRect(self) -> pygame.Rect:
-        return pygame.Rect(self.x_pos, self.y_pos, self.radius*2, self.radius*2)
+        return pygame.Rect(self.x_pos - self.radius, self.y_pos - self.radius, self.radius*2, self.radius*2)
     
     def get_damaged(self, damage: float):
         self.hp -= damage
