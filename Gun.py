@@ -23,7 +23,7 @@ class Gun:
 class MachineGun(Gun):
     def __init__(self):
         self.bullet_spread = 0.5
-        self.bullet_damage = 1
+        self.bullet_damage = 20
         self.bullet_speed = 7
         self.ammo = 20
         self.reload_per_tick = 1/30
