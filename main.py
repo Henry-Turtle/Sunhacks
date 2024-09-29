@@ -13,8 +13,8 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 running = True
 game = Game((WIDTH, HEIGHT))
-game.stage.spawn_enemy(Enemy(1, 100.0, 100, 50, 25, 50))
-game.stage.spawn_enemy(Enemy(1, 100.0, 400, 700, 25, 50))
+#game.stage.spawn_enemy(Enemy(1, 100.0, 100, 50, 25, 50))
+#game.stage.spawn_enemy(Enemy(1, 100.0, 400, 700, 25, 50))
 mouseX, mouseY = pygame.mouse.get_pos()
 CENTER = (WIDTH/2, HEIGHT/2)
 BOX_SIZE = 40
@@ -94,8 +94,8 @@ while running:
     for gun in game.player.guns:
         if gun != game.player.current_gun:
             gun.reload()
-
-    
+    for tempobj in game.stage.temporary_objects:
+        pass
 
 
 
