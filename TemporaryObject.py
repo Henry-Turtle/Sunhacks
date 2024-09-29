@@ -37,7 +37,7 @@ class JackHammer(TemporaryObject):
     class ShortGun(TemporaryObject):
         
         def __init__(self, color=(225, 225, 225), speed=0):
-        super().__init__(color, speed)
+            super().__init__(color, speed)
     # SniperTrail specific initialization, if any
     pass
     
