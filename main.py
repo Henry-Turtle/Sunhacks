@@ -54,7 +54,6 @@ while running:
     #game.player.handle_movement(actions[pygame.K_a], actions[pygame.K_d], actions[pygame.K_w], actions[pygame.K_s])
     if pygame.mouse.get_pressed()[0] and game.player.current_gun.autofire and game.player.current_gun.can_fire():
         game.shoot((mouseX, mouseY))
-
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("black")
 

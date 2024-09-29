@@ -1,5 +1,6 @@
 from Enemy import Enemy
 from Bullet import Bullet
+from Gun import *
 class Stage:
     enemies: list[Enemy]
     bullets: list[Bullet]
@@ -21,6 +22,8 @@ class Stage:
 
     def handle_enemy_movement(self, enemy: Enemy, center: tuple[float, float]):
         enemy.handle_movement(center)
+    
+    
 
     #@enemy_array_position is the position of the enemy in the "enemies" array. This will be much faster
     def destroy_enemy(self, enemy_array_position: int):
