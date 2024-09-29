@@ -2,7 +2,8 @@ class Gun:
     bullet_speed: float
     bullet_damage: float #How many radians in either idrection the bullet can spread
     bullet_spread: float
-    ammo: int
+    max_ammo: float
+    ammo: float
     reload_per_tick: int
     bullet_size: int
     autofire: bool
@@ -14,17 +15,27 @@ class Gun:
             self.current_shoot_delay_ticks -= 1
             return
 
-    def reload(self):
-        self.ammo += self.reload_per_tick
+    def reload(self) -> None:
+        if self.ammo < self.max_ammo:
+            self.ammo += self.reload_per_tick
+            return
+        if self.ammo < self.max_ammo:
+            self.ammo = self.max_ammo
+            return
+        return
     
     def can_fire(self)->bool:
         return self.current_shoot_delay_ticks == 0
+    
+    def ammo_percentage(self)->float:
+        return self.ammo / self.max_ammo
 
 class MachineGun(Gun):
     def __init__(self):
         self.bullet_spread = 0.5
         self.bullet_damage = 20
         self.bullet_speed = 7
+        self.max_ammo = 20
         self.ammo = 20
         self.reload_per_tick = 1/30
         self.bullet_size= 5
