@@ -100,7 +100,7 @@ class main:
                 bullet.ticks_loaded += 1
                 if bullet.ticks_loaded > 180:
                     self.game.explode_grenade(bullet)
-                bullet.speed = math.e **(2-bullet.ticks_loaded/30)
+                bullet.speed = math.e **(2.5-bullet.ticks_loaded/30)
             elif bullet.type == "shotgun":
                 bullet.ticks_loaded += 1
             bullet.draw(self.screen)
@@ -165,14 +165,14 @@ class main:
     def handle_skilltree(self):
         self.screen.fill(pygame.Color("black"))
 
-        money = self.big_font.render("Cash: $" + str(math.round(self.game.money, 2)), False, self.WHITE)
+        money = self.big_font.render("Cash: $" + str(round(self.game.money, 2)), False, self.WHITE)
         self.screen.blit(money, (50, 75))
         newgame = self.medium_font.render("New Game", False, self.WHITE, self.RED)
         self.screen.blit(newgame, (self.WIDTH - 20-newgame.get_width(), self.HEIGHT - 20-newgame.get_height()))
         newgame_rect = pygame.Rect(self.WIDTH - 20 - newgame.get_width(), self.HEIGHT - 20 - newgame.get_height(), newgame.get_width(), newgame.get_height())
 
         reload = self.medium_font.render("Upgrade Reload: $" + str(self.reload_cost), False, self.WHITE, self.RED)
-        reload_rect: pygame.Rect = reload.get_rect()
+        reload_rect = reload.get_rect()
         reload_rect.top = self.HEIGHT/2-200
         reload_rect.left = self.WIDTH/2-200
         
@@ -197,21 +197,26 @@ class main:
                 if newgame_rect.collidepoint(self.mouseX, self.mouseY):
                     self.game.reset(self.guns)
                     self.state = "playing"
+
                 if reload_rect.collidepoint(self.mouseX, self.mouseY) and self.game.money >= self.reload_cost:
-                    for gun in self.guns:
-                        gun.reload_per_tick = gun.reload_per_tick * 2
+                    print("BOUGHT RELOAD")
                     self.game.money -= self.reload_cost
                     self.reload_cost = self.reload_cost * 2
-                if damage_rect.collidepoint(self.mouseX, self.mouseY) and self.game.money >= self.damage_cost:
                     for gun in self.guns:
-                        gun.damage = gun.damage * 1.5
+                        gun.reload_per_tick = gun.reload_per_tick * 2
+                    
+                if damage_rect.collidepoint(self.mouseX, self.mouseY) and self.game.money >= self.damage_cost:
+                    print("BOUGHT DAMAGE")
+                    for gun in self.guns:
+                        gun.bullet_damage = gun.bullet_damage * 1.5
                     self.game.money -= self.damage_cost
                     self.damage_cost = self.damage_cost * 2
                 if size_rect.collidepoint(self.mouseX, self.mouseY) and self.game.money >= self.width_cost:
+                    print("BOUGHT SIZE")
                     for gun in self.guns:
                         gun.bullet_size = gun.bullet_size + 3
-                self.game.money -= self.width_cost
-                self.width_cost = self.width_cost * 2
+                    self.game.money -= self.width_cost
+                    self.width_cost = self.width_cost * 2
 
                     
         pygame.display.flip()
