@@ -19,6 +19,9 @@ class Stage:
     def spawn_bullet(self, bullet: Bullet):
         self.bullets.append(bullet)
 
+    def handle_enemy_movement(self, enemy: Enemy, center: tuple[float, float]):
+        enemy.handle_movement(center)
+
     #@enemy_array_position is the position of the enemy in the "enemies" array. This will be much faster
     def destroy_enemy(self, enemy_array_position: int):
         self.enemies.pop[enemy_array_position]

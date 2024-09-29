@@ -13,7 +13,7 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 running = True
 game = Game((WIDTH, HEIGHT))
-#game.stage.spawn_enemy(Enemy(1, 100.0, 100, 50, 25, 50))
+game.stage.spawn_enemy(Rectangle(1, 100.0, 100, 50, 25, 50, 100))
 #game.stage.spawn_enemy(Enemy(1, 100.0, 400, 700, 25, 50))
 mouseX, mouseY = pygame.mouse.get_pos()
 CENTER = (WIDTH/2, HEIGHT/2)
@@ -65,7 +65,7 @@ while running:
 
     #*Render all enemies
     for enemy in game.stage.enemies:
-        enemy.handle_movement(CENTER)
+        game.stage.handle_enemy_movement(enemy, CENTER)
         #pygame.draw.rect(screen, pygame.Color(255, 0, 0, 0), pygame.Rect(enemy.x_pos, enemy.y_pos, enemy.width, enemy.height))
         enemy.draw(screen, CENTER)
 
@@ -94,8 +94,8 @@ while running:
     for gun in game.player.guns:
         if gun != game.player.current_gun:
             gun.reload()
-    for tempobj in game.stage.temporary_objects:
-        pass
+    #for tempobj in game.stage.temporary_objects:
+        #pass
 
 
 
