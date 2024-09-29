@@ -17,10 +17,11 @@ class Game:
     ticks: int
     seconds: int
     enemy_list = [Rectangle, EnemySpiral]
+    money = 0
     
     def __init__(self, dimensions: tuple[int]):
         self.stage = Stage()
-        self.player = Player()
+        self.player = Player([MachineGun(), Shotgun(), SniperRifle(), GrenadeLauncher()])
 
         x, y = dimensions
         self.center = [x/2, y/2]
@@ -29,6 +30,12 @@ class Game:
         self.seconds = 0
         self.ticks = 0
     
+    def reset(self, guns: tuple[Gun]):
+        self.ticks = 0
+        self.seconds = 0
+        self.stage = Stage()
+        self.player = Player(guns)
+
     def spawn_enemies(self):
         rand = random.Random()
         enemy: Enemy = self.enemy_list[random.randint(0, len(self.enemy_list)-1)]
@@ -91,6 +98,9 @@ class Game:
                 v[1]*self.bullet_spawn_radius*-1+self.center[1],
                 v
                 ))
+
+        pygame.mixer.music.load("rifle.mp3")
+        pygame.mixer.music.play()
         
     def shoot_shotgun(self, mouse_pos: tuple[int, int]):
         x, y = mouse_pos
@@ -107,13 +117,15 @@ class Game:
             random_angle = theta + rand.random()*self.player.current_gun.bullet_spread - self.player.current_gun.bullet_spread/2
             cos = math.cos(random_angle)
             sin = math.sin(random_angle)
-            print(theta, random_angle, cos, sin)
 
             self.stage.spawn_bullet(self.player.create_bullet(
                     self.center[0] + cos*self.bullet_spawn_radius,
                     self.center[1] + sin*self.bullet_spawn_radius*-1,
                     [cos, sin]
                     ))
+        
+        pygame.mixer.music.load("shotgun.mp3")
+        pygame.mixer.music.play()
 
     def shoot_sniper(self, mouse_pos: tuple):
         x, y = mouse_pos
@@ -132,7 +144,10 @@ class Game:
         for enemy in damaged_enemies:
             self.damage(enemy, self.player.current_gun.bullet_damage)
         
-        self.stage.spawn_temporary_object(SniperTrail(self.center, v))
+        self.stage.spawn_temporary_object(SniperTrail(self.center, v, self.player.current_gun.bullet_size))
+
+        pygame.mixer.music.load("sniper.mp3")
+        pygame.mixer.music.play()
 
     def shoot_grenadelauncher(self, mouse_pos: tuple):
         x, y = mouse_pos
@@ -148,16 +163,33 @@ class Game:
                 v[1]*self.bullet_spawn_radius*-1+self.center[1],
                 v
                 ))
+        
+        pygame.mixer.music.load("grenade_launcher.mp3")
+        pygame.mixer.music.play()
 
-
+    def does_grenade_hit_enemy(self, enemy: Enemy, bullet: GrenadeBullet):
+        rad = bullet.explosion_radius
+        x = enemy.x_pos
+        y = enemy.y_pos
+        bullet_pos = [bullet.pos_x, bullet.pos_y]
+        width = enemy.width
+        height = enemy.height
+        return math.dist([x, y], bullet_pos) <= rad or math.dist([x+width, y], bullet_pos) <= rad or math.dist([x, y+height], bullet_pos)<= rad or math.dist([x+width, y+height], bullet_pos)<= rad
+    
     def explode_grenade(self, bullet: GrenadeBullet):
+        enemy_list = []
         for enemy in self.stage.enemies:
             dist = math.dist([enemy.x_pos + enemy.width, enemy.y_pos + enemy.height], [bullet.pos_x, bullet.pos_y])
-            if dist <= bullet.explosion_radius:
-                self.damage(enemy, bullet.damage)
+            if self.does_grenade_hit_enemy(enemy, bullet):
+                enemy_list.append(enemy)
+        pygame.mixer.music.load("explosion.mp3")
+        pygame.mixer.music.play()
+                
         self.stage.spawn_temporary_object(GrenadeExplosion((bullet.pos_x, bullet.pos_y), bullet.explosion_radius))
+        for e in enemy_list:
+            self.damage(e, bullet.damage)
         self.stage.bullets.remove(bullet)
-        pass
+        
 
 
     def do_collisions(self):
@@ -165,16 +197,18 @@ class Game:
             enemystack:tuple[Enemy] = []
             enemy_rects:tuple[pygame.Rect] = [e.getRect() for e in self.stage.enemies]
             damaged_enemies: tuple = bullet.get_rect().collidelistall(enemy_rects)
-            if len(damaged_enemies) > 0:
-                self.destroy_bullet(bullet)
             for enemy_index in damaged_enemies:
                 enemystack.append(self.stage.enemies[enemy_index])
             for enemy in enemystack:   
                 self.damage(enemy, bullet.damage)
+            if len(damaged_enemies) > 0:
+                self.destroy_bullet(bullet)
 
 
     def destroy_enemy(self, enemy: Enemy)->None:
+        self.money += (enemy.damage + enemy.max_hp) / 10
         self.stage.enemies.remove(enemy)
+        
 
     def destroy_bullet(self, bullet: Bullet)->None:
         if bullet.type == "grenade":

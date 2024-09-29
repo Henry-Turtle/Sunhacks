@@ -4,125 +4,237 @@ from Enemy import *
 from Stage import Stage
 import math
 from Bullet import *
+from Gun import *
 
-
+class main:
+    def __init__(self):
 # pygame setup
-pygame.init()
-WIDTH = 1000
-HEIGHT = 800
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-clock = pygame.time.Clock()
-running = True
-game = Game((WIDTH, HEIGHT))
-game.stage.spawn_enemy(Rectangle(1, 100.0, 100, 50, 25, 50, 100))
-game.stage.spawn_enemy(EnemySpiral(1, 100.0, 400, 700, 25, 50, 100))
-mouseX, mouseY = pygame.mouse.get_pos()
-CENTER = (WIDTH/2, HEIGHT/2)
-BOX_SIZE = 40
-BOX_SPACE = 25
+        pygame.init()
+        pygame.font.init() 
+        pygame.mixer.init()
+        pygame.mixer.music.set_volume(0.5)
+
+        self.big_font = pygame.font.SysFont('Ariel', 80)
+        self.medium_font = pygame.font.SysFont('Ariel', 60)
+        self.WIDTH = 1400
+        self.HEIGHT = 800
+        self.screen = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
+        self.clock = pygame.time.Clock()
+        self.running = True
+        self.game = Game((self.WIDTH, self.HEIGHT))
+        self.mouseX, self.mouseY = pygame.mouse.get_pos()
+        self.CENTER = (self.WIDTH/2, self.HEIGHT/2)
+        self.BOX_SIZE = 40
+        self.BOX_SPACE = 25
+        self.state = "playing"
+
+        self.RED = pygame.Color(255,73,79)
+        self.WHITE = pygame.Color("white")
+        self.guns = [MachineGun(), Shotgun(), SniperRifle(), GrenadeLauncher()]
+
+        self.reload_cost = 100
+        self.width_cost = 50
+        self.damage_cost = 50
+
+
+    def handle_start(self):
+        pass
+
+    def handle_playing(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.MOUSEMOTION:
+                self.mouseX, self.mouseY = pygame.mouse.get_pos()
+            if event.type == pygame.MOUSEBUTTONDOWN and self.game.player.current_gun.can_fire():
+                self.game.shoot((self.mouseX, self.mouseY))
+                fired = True
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_1:
+                    self.game.player.swap_gun(0)
+                if event.key == pygame.K_2:
+                    self.game.player.swap_gun(1)
+                    print(True)
+                if event.key == pygame.K_3:
+                    self.game.player.swap_gun(2)
+                if event.key == pygame.K_4:
+                    self.game.player.swap_gun(3)
+        #actions = pygame.key.get_pressed()
+        #self.game.player.handle_movement(actions[pygame.K_a], actions[pygame.K_d], actions[pygame.K_w], actions[pygame.K_s])
+        if pygame.mouse.get_pressed()[0] and self.game.player.current_gun.autofire and self.game.player.current_gun.can_fire():
+            self.game.shoot((self.mouseX, self.mouseY))
+        # fill the self.screen with a color to wipe away anything from last frame
+        self.screen.fill("black")
+
+        self.game.do_collisions()
+        # RENDER YOUR GAME HERE
+        for obj in self.game.stage.temporary_objects:
+            obj.draw(self.screen)
+            self.game.stage.decay_temporary_object(obj)
+        
+        
+
+        #*render the homebase
+        pygame.draw.rect(self.screen, pygame.Color("green"), pygame.Rect(self.WIDTH/2 - 15, self.HEIGHT/2 - 15, 30, 30))
+
+        self.game.spawn_enemies()
+        #*Render all enemies
+        for enemy in self.game.stage.enemies:
+            self.game.stage.handle_enemy_movement(enemy, self.CENTER)
+            enemy.draw(self.screen, self.CENTER)
+            if enemy.getRect().colliderect(pygame.Rect(self.WIDTH/2 - 15, self.HEIGHT/2 - 15, 30, 30)):
+                self.game.player.current_health -= enemy.damage
+            if self.game.player.current_health <= 0:
+                self.state = "gameover"
+                self.game.destroy_enemy(enemy)
+
+
+        
+        #*Render and process all bullets
+
+        for bullet in self.game.stage.bullets:
+            bullet.handle_movement()
+            if bullet.pos_x > self.WIDTH or bullet.pos_x < 0 or bullet.pos_y < 0 or bullet.pos_y > self.HEIGHT:
+                self.game.stage.bullets.remove(bullet)
+            if bullet.type == "grenade":
+                bullet.ticks_loaded += 1
+                if bullet.ticks_loaded > 180:
+                    self.game.explode_grenade(bullet)
+                bullet.speed = math.e **(2-bullet.ticks_loaded/30)
+            elif bullet.type == "shotgun":
+                bullet.ticks_loaded += 1
+            bullet.draw(self.screen)
+
+        
+
+        
+
+        
+
+
+        #* Draw the UI
+        for i in range(len(self.game.player.guns)):
+            color =self.RED
+            #image = self.game.player.guns[i].get_image()
+            if self.game.player.current_gun == self.game.player.guns[i]:
+                color = pygame.Color("green")
+            pygame.draw.rect(self.screen, color, pygame.Rect(30+i*(40+self.BOX_SPACE), self.HEIGHT-30-self.BOX_SIZE, self.BOX_SIZE, self.BOX_SIZE), 2)
+            pygame.draw.rect(self.screen, color, pygame.Rect(30+i*(40+self.BOX_SPACE), self.HEIGHT-30-self.BOX_SIZE+(self.BOX_SIZE*(1-self.game.player.guns[i].ammo_percentage())), self.BOX_SIZE, self.BOX_SIZE*self.game.player.guns[i].ammo_percentage()))
+
+        color = self.RED
+        pygame.draw.rect(self.screen, color, pygame.Rect(30, 30, 150*(self.game.player.current_health/self.game.player.max_health), 30))
+        color = pygame.Color("white")
+        pygame.draw.rect(self.screen, color, pygame.Rect(30, 30, 150, 30), 2)
+        text = "$" + str(round(self.game.money,2))
+        moneytext = self.medium_font.render(text, False, color)
+        self.screen.blit(moneytext, (30+150+30, 30))
+        
+        #*Handle any misc operations
+        self.game.player.current_gun.shoot_delay_tick_down()
+
+        for gun in self.game.player.guns:
+            if gun != self.game.player.current_gun:
+                gun.reload()
+        #for tempobj in self.game.stage.temporary_objects:
+            #pass
 
 
 
+        # flip() the display to put your work on self.screen
+        pygame.display.flip()
+        self.game.ticks+=1  
 
+    def handle_gameover(self):
+        gameover: pygame.Surface = self.big_font.render("GAME OVER", False, pygame.Color("white"), self.RED)
+        click: pygame.Surface = self.medium_font.render("CLICK TO CONTINUE", False, pygame.Color("white"), self.RED)
 
-while running:
-
-    # poll for events
-    # pygame.QUIT event means the user clicked X to close your window
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        if event.type == pygame.MOUSEMOTION:
-            mouseX, mouseY = pygame.mouse.get_pos()
-        if event.type == pygame.MOUSEBUTTONDOWN and game.player.current_gun.can_fire():
-            game.shoot((mouseX, mouseY))
-            fired = True
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_1:
-                game.player.swap_gun(0)
-            if event.key == pygame.K_2:
-                game.player.swap_gun(1)
+        self.screen.blit(gameover, (self.WIDTH/2-gameover.get_width()/2, self.HEIGHT/2-gameover.get_height()/2))
+        self.screen.blit(click, (self.WIDTH/2-click.get_width()/2, self.HEIGHT/2-click.get_height()/2+100))
+        
+        pygame.display.flip()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+            if event.type == pygame.MOUSEMOTION:
+                self.mouseX, self.mouseY = pygame.mouse.get_pos()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                self.state = "skilltree"
                 print(True)
-            if event.key == pygame.K_3:
-                game.player.swap_gun(2)
-            if event.key == pygame.K_4:
-                game.player.swap_gun(3)
-    actions = pygame.key.get_pressed()
-    #game.player.handle_movement(actions[pygame.K_a], actions[pygame.K_d], actions[pygame.K_w], actions[pygame.K_s])
-    if pygame.mouse.get_pressed()[0] and game.player.current_gun.autofire and game.player.current_gun.can_fire():
-        game.shoot((mouseX, mouseY))
-    # fill the screen with a color to wipe away anything from last frame
-    screen.fill("black")
+                return
 
-    game.do_collisions()
-    # RENDER YOUR GAME HERE
+    def handle_skilltree(self):
+        self.screen.fill(pygame.Color("black"))
 
-    
+        money = self.big_font.render("Cash: $" + str(math.round(self.game.money, 2)), False, self.WHITE)
+        self.screen.blit(money, (50, 75))
+        newgame = self.medium_font.render("New Game", False, self.WHITE, self.RED)
+        self.screen.blit(newgame, (self.WIDTH - 20-newgame.get_width(), self.HEIGHT - 20-newgame.get_height()))
+        newgame_rect = pygame.Rect(self.WIDTH - 20 - newgame.get_width(), self.HEIGHT - 20 - newgame.get_height(), newgame.get_width(), newgame.get_height())
 
-    #*render the homebase
-    pygame.draw.rect(screen, pygame.Color("green"), pygame.Rect(WIDTH/2 - 15, HEIGHT/2 - 15, 30, 30))
+        reload = self.medium_font.render("Upgrade Reload: $" + str(self.reload_cost), False, self.WHITE, self.RED)
+        reload_rect: pygame.Rect = reload.get_rect()
+        reload_rect.top = self.HEIGHT/2-200
+        reload_rect.left = self.WIDTH/2-200
+        
+        damage = self.medium_font.render("Upgrade Damage: $" + str(self.damage_cost), False, self.WHITE, self.RED)
+        damage_rect = damage.get_rect()
+        damage_rect.top = self.HEIGHT/2
+        damage_rect.left = self.WIDTH/2-200
 
-    game.spawn_enemies()
-    #*Render all enemies
-    for enemy in game.stage.enemies:
-        game.stage.handle_enemy_movement(enemy, CENTER)
-        #pygame.draw.rect(screen, pygame.Color(255, 0, 0, 0), pygame.Rect(enemy.x_pos, enemy.y_pos, enemy.width, enemy.height))
-        enemy.draw(screen, CENTER)
+        size = self.medium_font.render("Upgrade Attack Size: $" + str(self.width_cost), False, self.WHITE, self.RED)
+        size_rect = size.get_rect()
+        size_rect.top = self.HEIGHT/2+200
+        size_rect.left = self.WIDTH/2-200
 
-    
-    #*Render and process all bullets
+        self.screen.blits([(reload, (self.WIDTH/2-200, self.HEIGHT/2-200)), (damage, (self.WIDTH/2-200, self.HEIGHT/2)), (size, (self.WIDTH/2-200, self.HEIGHT/2+200))])
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+            if event.type == pygame.MOUSEMOTION:
+                self.mouseX, self.mouseY = pygame.mouse.get_pos()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if newgame_rect.collidepoint(self.mouseX, self.mouseY):
+                    self.game.reset(self.guns)
+                    self.state = "playing"
+                if reload_rect.collidepoint(self.mouseX, self.mouseY) and self.game.money >= self.reload_cost:
+                    for gun in self.guns:
+                        gun.reload_per_tick = gun.reload_per_tick * 2
+                    self.game.money -= self.reload_cost
+                    self.reload_cost = self.reload_cost * 2
+                if damage_rect.collidepoint(self.mouseX, self.mouseY) and self.game.money >= self.damage_cost:
+                    for gun in self.guns:
+                        gun.damage = gun.damage * 1.5
+                    self.game.money -= self.damage_cost
+                    self.damage_cost = self.damage_cost * 2
+                if size_rect.collidepoint(self.mouseX, self.mouseY) and self.game.money >= self.width_cost:
+                    for gun in self.guns:
+                        gun.bullet_size = gun.bullet_size + 3
+                self.game.money -= self.width_cost
+                self.width_cost = self.width_cost * 2
 
-    for bullet in game.stage.bullets:
-        bullet.handle_movement()
-        if bullet.pos_x > WIDTH or bullet.pos_x < 0 or bullet.pos_y < 0 or bullet.pos_y > HEIGHT:
-            game.stage.bullets.remove(bullet)
-        if bullet.type == "grenade":
-            bullet.ticks_loaded += 1
-            if bullet.ticks_loaded > 180:
-                game.explode_grenade(bullet)
-            bullet.speed = math.e **(2-bullet.ticks_loaded/30)
-        elif bullet.type == "shotgun":
-            bullet.ticks_loaded += 1
-        bullet.draw(screen)
+                    
+        pygame.display.flip()
 
-    
+    def loop(self):
+        while self.running:
+            self.clock.tick(60)  # limits FPS to 60
+            if self.state == "start":
+                self.handle_start()
+            elif self.state == "playing":
+                self.handle_playing()
+            elif self.state == "gameover":
+                self.handle_gameover()
+            elif self.state == "skilltree":
+                self.handle_skilltree()
 
-    for obj in game.stage.temporary_objects:
-        obj.draw(screen)
-        game.stage.decay_temporary_object(obj)
-    
+        # poll for events
+        # pygame.QUIT event means the user clicked X to close your window
+        
+        
+        pygame.quit()
 
-    
-
-
-    #* Draw the UI
-    for i in range(len(game.player.guns)):
-        color = pygame.Color("red")
-        #image = game.player.guns[i].get_image()
-        if game.player.current_gun == game.player.guns[i]:
-            color = pygame.Color("green")
-        pygame.draw.rect(screen, color, pygame.Rect(30+i*(40+BOX_SPACE), HEIGHT-30-BOX_SIZE, BOX_SIZE, BOX_SIZE), 2)
-        pygame.draw.rect(screen, color, pygame.Rect(30+i*(40+BOX_SPACE), HEIGHT-30-BOX_SIZE+(BOX_SIZE*(1-game.player.guns[i].ammo_percentage())), BOX_SIZE, BOX_SIZE*game.player.guns[i].ammo_percentage()))
-
-    
-    #*Handle any misc operations
-    game.player.current_gun.shoot_delay_tick_down()
-
-    for gun in game.player.guns:
-        if gun != game.player.current_gun:
-            gun.reload()
-    #for tempobj in game.stage.temporary_objects:
-        #pass
-
-
-
-    # flip() the display to put your work on screen
-    pygame.display.flip()
-    game.ticks+=1
-
-    
-    clock.tick(60)  # limits FPS to 60
-
-pygame.quit()
+instance = main()
+instance.loop()
 
 

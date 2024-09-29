@@ -7,15 +7,16 @@ class Player:
     pos_x: int
     pos_y: int
     speed: int
+    health: float
 
-    def __init__(self):
+    def __init__(self, guns: tuple[Gun]):
         self.guns = []
-        self.guns.append(MachineGun())
-        self.guns.append(Shotgun())
-        self.guns.append(SniperRifle())
-        self.guns.append(GrenadeLauncher())
+        for gun in guns:
+            self.guns.append(gun)
 
         self.current_gun = self.guns[0]
+        self.current_health = 100
+        self.max_health = 100
     
     def create_bullet(self, x: float, y: float, direction: list[float]) -> Bullet:
         if isinstance(self.current_gun, GrenadeLauncher):

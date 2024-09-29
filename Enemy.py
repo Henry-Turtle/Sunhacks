@@ -49,7 +49,6 @@ class Rectangle(Enemy):
     
 
     def draw(self, screen: pygame.Surface, target: tuple):
-
         color = [255-170*(1-self.hp/self.max_hp), 85*(1-self.hp/self.max_hp), 85*(1-self.hp/self.max_hp)]
 
         pygame.draw.rect(screen, pygame.Color(int(color[0]), int(color[1]), int(color[2])), pygame.Rect(self.x_pos, self.y_pos, self.width, self.height))

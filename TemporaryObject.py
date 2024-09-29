@@ -14,14 +14,14 @@ class TemporaryObject:
 
 class SniperTrail(TemporaryObject):
     line: list[float, float]
-    def __init__(self, start: list[float, float], v: list[float, float]):
+    def __init__(self, start: list[float, float], v: list[float, float], width: int):
         self.color = (150, 150, 150)
         self.line = [v[0], -1*v[1]]
         self.pos = start
         self.decay_speed = 150/60
 
     def draw(self, screen:pygame.display):
-        pygame.draw.line(screen, self.color, self.pos, [self.pos[0]+self.line[0], self.pos[1]+self.line[1]])
+        pygame.draw.line(screen, self.color, self.pos, [self.pos[0]+self.line[0], self.pos[1]+self.line[1]], width)
 
         
 class GrenadeExplosion(TemporaryObject):
