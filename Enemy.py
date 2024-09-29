@@ -46,17 +46,22 @@ class Triangle(Enemy):
     def draw(self, screen: pygame.Surface, target: tuple):
 
         centroid = (self.x_pos, self.y_pos)
-        distance = ((self.x_pos**2)+(self.y_pos**2))**0.5
-        vertexes = [None, None, None]
-        median = self.side*(3**0.5)/2
+        # # distance = ((self.x_pos**2)+(self.y_pos**2))**0.5
+        # vertexes = [None, None, None]
+        # median = self.side*(3**0.5)/2
         angle_to_origin = math.atan((centroid[1] - target[1])/(centroid[0] - target[0]))
-        # vertex1 = [centroid[0]-((median*(2/3))*math.)]
+        # # vertex1 = [centroid[0]-((median*(2/3))*math.)]
 
-        for i in range(3):
-            vertexes[i] = [centroid[0] - (median*(2/3)*math.cos((math.pi/2) - angle_to_origin - ((2*math.pi/3)*i))), centroid[1] + (median*(2/3)*math.cos((0 - (math.pi/2)) + angle_to_origin - ((2*math.pi/3)*i)))]
+        # for i in range(3):
+        #     vertexes[i] = [centroid[0] - (median*(2/3)*math.cos((math.pi/2) - angle_to_origin - ((2*math.pi/3)*i))), centroid[1] + (median*(2/3)*math.cos(((math.pi/2)) + angle_to_origin - ((2*math.pi/3)*i)))]
         
 
-        pygame.draw.polygon(screen, pygame.Color(255, 0, 0), vertexes)
+        triangle_img = pygame.image.load("Untitled.png")
+        triangle_img = pygame.transform.rotate(triangle_img, math.pi+angle_to_origin)
+        triangle_img = pygame.transform.scale_by(triangle_img, 0.33)
+        screen.blit(triangle_img, [self.x_pos, self.y_pos])
+
+        # pygame.draw.polygon(screen, pygame.Color(255, 0, 0), vertexes)
         
 
 
@@ -66,14 +71,14 @@ class Rectangle(Enemy):
         return super().__str__()
 
 
-class Pentagon(Enemy):
+# class Pentagon(Enemy):
 
-    def __init__(self, speed: float, dmg: float, x: float, y: float, side: float) -> None:
-        self.speed = speed
-        self.damage = dmg
-        self.x_pos = x
-        self.y_pos = y
-        self.side = side
+#     def __init__(self, speed: float, dmg: float, x: float, y: float, side: float) -> None:
+#         self.speed = speed
+#         self.damage = dmg
+#         self.x_pos = x
+#         self.y_pos = y
+#         self.side = side
 
-    def __str__(self) -> str:
-        return f"Enemy [{self.x_pos}, {self.y_pos}, {self.speed}, {self.damage}]" 
+#     def __str__(self) -> str:
+#         return f"Enemy [{self.x_pos}, {self.y_pos}, {self.speed}, {self.damage}]" 
