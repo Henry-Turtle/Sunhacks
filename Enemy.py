@@ -44,11 +44,11 @@ class Triangle(Enemy):
         self.x_pos = x
         self.y_pos = y
         self.side = side
-        self.width = self.triangle_img.get_width()/2
-        self.height = self.triangle_img.get_height()/2
 
         self.triangle_img = pygame.image.load("Untitled.png")
         self.triangle_img = pygame.transform.scale_by(self.triangle_img, 0.02)
+        self.width = self.triangle_img.get_width()/2
+        self.height = self.triangle_img.get_height()/2
 
     def __str__(self) -> str:
         return f"Triangle [{self.x_pos}, {self.y_pos}, {self.speed}, {self.damage}]"
