@@ -85,7 +85,7 @@ class GrenadeLauncher(Gun):
     def __init__(self):
         self.bullet_spread = 0
         self.bullet_speed = 10
-        self.bullet_damage = 80
+        self.bullet_damage = 20
         self.max_ammo = 5
         self.ammo = 5
         self.reload_per_tick = 1/150

@@ -18,9 +18,9 @@ class Player:
         self.current_health = 100
         self.max_health = 100
     
-    def create_bullet(self, x: float, y: float, direction: list[float]) -> Bullet:
+    def create_bullet(self, x: float, y: float, direction: list[float], blast_radius: int = 100) -> Bullet:
         if isinstance(self.current_gun, GrenadeLauncher):
-            return GrenadeBullet(x, y, direction, self.current_gun.bullet_speed,self.current_gun.bullet_damage, self.current_gun.bullet_size)
+            return GrenadeBullet(x, y, direction, self.current_gun.bullet_speed,self.current_gun.bullet_damage, self.current_gun.bullet_size, blast_radius)
         elif isinstance(self.current_gun, Shotgun):
             return ShotgunBullet(x, y, direction, self.current_gun.bullet_speed, self.current_gun.bullet_damage, self.current_gun.bullet_size)
         return Bullet(x, y, direction, self.current_gun.bullet_speed, self.current_gun.bullet_damage, self.current_gun.bullet_size)

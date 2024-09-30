@@ -27,6 +27,7 @@ class Game:
         self.center = [x/2, y/2]
 
         self.bullet_spawn_radius = 30
+        self.grenade_radius = 100
         self.seconds = 0
         self.ticks = 0
     
@@ -161,7 +162,7 @@ class Game:
         self.stage.spawn_bullet(self.player.create_bullet(
                 v[0]*self.bullet_spawn_radius+self.center[0],
                 v[1]*self.bullet_spawn_radius*-1+self.center[1],
-                v
+                v, self.grenade_radius
                 ))
         
         pygame.mixer.music.load("grenade_launcher.mp3")

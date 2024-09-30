@@ -6,6 +6,7 @@ import math
 from Bullet import *
 from Gun import *
 import sys
+import random
 
 class main:
     def __init__(self):
@@ -28,6 +29,7 @@ class main:
         self.BOX_SIZE = 40
         self.BOX_SPACE = 25
         self.state = "playing"
+        self.flag = False
 
         self.RED = pygame.Color(255,73,79)
         self.WHITE = pygame.Color("white")
@@ -35,6 +37,7 @@ class main:
 
         self.reload_cost = 100
         self.width_cost = 50
+        self.radius_cost = 150
         self.damage_cost = 50
 
 
@@ -188,12 +191,25 @@ class main:
         damage_rect.top = self.HEIGHT/2
         damage_rect.left = self.WIDTH/2-200
 
-        size = self.medium_font.render("Upgrade Attack Size: $" + str(self.width_cost), False, self.WHITE, self.RED)
-        size_rect = size.get_rect()
-        size_rect.top = self.HEIGHT/2+200
-        size_rect.left = self.WIDTH/2-200
+        if not self.flag:
+            self.check = random.randrange(2)
+            self.flag = True
 
-        self.screen.blits([(reload, (self.WIDTH/2-200, self.HEIGHT/2-200)), (damage, (self.WIDTH/2-200, self.HEIGHT/2)), (size, (self.WIDTH/2-200, self.HEIGHT/2+200))])
+        if not self.check:
+            size = self.medium_font.render("Upgrade Attack Size: $" + str(self.width_cost), False, self.WHITE, self.RED)
+            size_rect = size.get_rect()
+            size_rect.top = self.HEIGHT/2+200
+            size_rect.left = self.WIDTH/2-200
+            self.screen.blits([(reload, (self.WIDTH/2-200, self.HEIGHT/2-200)), (damage, (self.WIDTH/2-200, self.HEIGHT/2)), (size, (self.WIDTH/2-200, self.HEIGHT/2+200))])
+        
+        else:
+            radius = self.medium_font.render("Upgrade Bomb Radius: $" + str(self.radius_cost), False, self.WHITE, self.RED)
+            radius_rect = radius.get_rect()
+            radius_rect.top = self.HEIGHT/2+200
+            radius_rect.left = self.WIDTH/2-200
+
+
+            self.screen.blits([(reload, (self.WIDTH/2-200, self.HEIGHT/2-200)), (damage, (self.WIDTH/2-200, self.HEIGHT/2)), (radius, (self.WIDTH/2-200, self.HEIGHT/2+200))])
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -204,6 +220,8 @@ class main:
                 if newgame_rect.collidepoint(self.mouseX, self.mouseY):
                     self.game.reset(self.guns)
                     self.state = "playing"
+                    self.flag = False
+
 
                 if reload_rect.collidepoint(self.mouseX, self.mouseY) and self.game.money >= self.reload_cost:
                     print("BOUGHT RELOAD")
@@ -215,15 +233,24 @@ class main:
                 if damage_rect.collidepoint(self.mouseX, self.mouseY) and self.game.money >= self.damage_cost:
                     print("BOUGHT DAMAGE")
                     for gun in self.guns:
-                        gun.bullet_damage = gun.bullet_damage * 1.5
+                        gun.bullet_damage = gun.bullet_damage + 5
                     self.game.money -= self.damage_cost
                     self.damage_cost = self.damage_cost * 2
-                if size_rect.collidepoint(self.mouseX, self.mouseY) and self.game.money >= self.width_cost:
-                    print("BOUGHT SIZE")
-                    for gun in self.guns:
-                        gun.bullet_size = gun.bullet_size + 3
-                    self.game.money -= self.width_cost
-                    self.width_cost = self.width_cost * 2
+
+                if not self.check:
+                    if size_rect.collidepoint(self.mouseX, self.mouseY) and self.game.money >= self.width_cost:
+                        print("BOUGHT SIZE")
+                        for gun in self.guns:
+                            gun.bullet_size = gun.bullet_size + 3
+                        self.game.money -= self.width_cost
+                        self.width_cost = self.width_cost * 2
+
+                elif radius_rect.collidepoint(self.mouseX, self.mouseY) and self.game.money >= self.radius_cost:
+                    print("BOUGHT RADIUS")
+                    self.game.grenade_radius += 10
+                    self.game.money -= self.radius_cost
+                    self.radius_cost = self.radius_cost * 2
+                    
 
                     
         pygame.display.flip()
@@ -233,11 +260,14 @@ class main:
             self.clock.tick(60)  # limits FPS to 60
             if self.state == "start":
                 pygame.mouse.set_visible(False)
+                self.flag = False
                 self.handle_start()
             elif self.state == "playing":
+                self.flag = False
                 pygame.mouse.set_visible(False)
                 self.handle_playing()
             elif self.state == "gameover":
+                self.flag = False
                 pygame.mouse.set_visible(True)
                 self.handle_gameover()
             elif self.state == "skilltree":

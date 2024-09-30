@@ -49,7 +49,7 @@ class ShotgunBullet(Bullet):
 
 class GrenadeBullet(Bullet):
     tick_loaded: int
-    def __init__(self, x: float, y: float, direction: list[float], speed: float, damage: float, bullet_size: int):
+    def __init__(self, x: float, y: float, direction: list[float], speed: float, damage: float, bullet_size: int, blast_radius: int):
         self.pos_x = x
         self.pos_y = y
         self.speed = speed
@@ -61,5 +61,5 @@ class GrenadeBullet(Bullet):
         self.damage = damage
 
         self.ticks_loaded = 0
-        self.explosion_radius = 100
+        self.explosion_radius = blast_radius
         self.type = "grenade"
