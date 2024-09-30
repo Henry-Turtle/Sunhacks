@@ -62,7 +62,7 @@ class SniperRifle(Gun):
         self.reload_per_tick = 1/240
         self.bullet_size = 2
         self.autofire = False
-        self.shoot_delay_ticks = 60
+        self.shoot_delay_ticks = 30
 
 class Shotgun(Gun):
     def __init__(self):

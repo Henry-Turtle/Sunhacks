@@ -140,6 +140,7 @@ class main:
         for gun in self.game.player.guns:
             if gun != self.game.player.current_gun:
                 gun.reload()
+                gun.shoot_delay_tick_down()
         self.game.player.current_gun.draw(self.screen)
         #for tempobj in self.game.stage.temporary_objects:
             #pass
