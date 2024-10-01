@@ -40,7 +40,7 @@ class Game:
     def spawn_enemies(self):
         rand = random.Random()
         enemy: Enemy = self.enemy_list[random.randint(0, len(self.enemy_list)-1)]
-        speed: float = (random.random())*(1+self.seconds/30)
+        speed: float = (random.randrange(5, 21)/20)*(1+self.seconds/30)
         hp: float = (random.random()+1)*(30+self.seconds/15)
         dmg: float = (random.random()+1)*(30+self.seconds/15)
         size:float = (random.random())*30+30

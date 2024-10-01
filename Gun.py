@@ -57,8 +57,8 @@ class SniperRifle(Gun):
         self.bullet_spread = 0
         self.bullet_damage = 100
         self.bullet_speed = 20
-        self.max_ammo = 2
-        self.ammo = 2
+        self.max_ammo = 5
+        self.ammo = 5
         self.reload_per_tick = 1/240
         self.bullet_size = 2
         self.autofire = False
@@ -68,7 +68,7 @@ class Shotgun(Gun):
     def __init__(self):
         self.bullet_spread = 0.5
         self.bullet_speed = 10
-        self.bullet_damage = 30
+        self.bullet_damage = 10
         self.max_ammo = 4
         self.ammo = 4
         self.reload_per_tick = 1/120

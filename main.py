@@ -30,6 +30,7 @@ class main:
         self.BOX_SPACE = 25
         self.state = "playing"
         self.flag = False
+        self.round = 1
 
         self.RED = pygame.Color(255,73,79)
         self.WHITE = pygame.Color("white")
@@ -42,6 +43,7 @@ class main:
 
 
     def handle_start(self):
+        self.__init__()
         pass
 
     def handle_playing(self):
@@ -96,6 +98,10 @@ class main:
                 self.state = "gameover"
                 self.game.destroy_enemy(enemy)
 
+        if len(self.game.stage.enemies) == 0 and self.game.stage.enemies_spawned >= self.game.stage.max_enemies:
+            print("Round Over")
+            self.state = "skilltree"
+
 
         
         #*Render and process all bullets
@@ -113,12 +119,6 @@ class main:
                 bullet.ticks_loaded += 1
             bullet.draw(self.screen)
 
-        
-
-        
-
-        
-
 
         #* Draw the UI
         for i in range(len(self.game.player.guns)):
@@ -133,7 +133,7 @@ class main:
         pygame.draw.rect(self.screen, color, pygame.Rect(30, 30, 150*(self.game.player.current_health/self.game.player.max_health), 30))
         color = pygame.Color("white")
         pygame.draw.rect(self.screen, color, pygame.Rect(30, 30, 150, 30), 2)
-        text = "$" + str(round(self.game.money,2))
+        text = "$" + str(round(self.game.money,2)) + f"Round {self.round}".rjust(50)
         moneytext = self.medium_font.render(text, False, color)
         self.screen.blit(moneytext, (30+150+30, 30))
         
@@ -177,7 +177,7 @@ class main:
 
         money = self.big_font.render("Cash: $" + str(round(self.game.money, 2)), False, self.WHITE)
         self.screen.blit(money, (50, 75))
-        newgame = self.medium_font.render("New Game", False, self.WHITE, self.RED)
+        newgame = self.medium_font.render("Next Round", False, self.WHITE, self.RED)
         self.screen.blit(newgame, (self.WIDTH - 20-newgame.get_width(), self.HEIGHT - 20-newgame.get_height()))
         newgame_rect = pygame.Rect(self.WIDTH - 20 - newgame.get_width(), self.HEIGHT - 20 - newgame.get_height(), newgame.get_width(), newgame.get_height())
 
@@ -221,6 +221,9 @@ class main:
                     self.game.reset(self.guns)
                     self.state = "playing"
                     self.flag = False
+                    self.game.stage.max_enemies *= 1.5
+                    self.game.stage.enemies_spawned = 0
+                    self.round += 1
 
 
                 if reload_rect.collidepoint(self.mouseX, self.mouseY) and self.game.money >= self.reload_cost:

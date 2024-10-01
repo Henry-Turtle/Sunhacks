@@ -11,10 +11,14 @@ class Stage:
         self.enemies = []
         self.bullets = []
         self.temporary_objects = []
+        self.max_enemies = 10
+        self.enemies_spawned = 0
 
     
     def spawn_enemy(self, enemy: Enemy):
-        self.enemies.append(enemy)
+        if self.enemies_spawned < self.max_enemies:
+            self.enemies.append(enemy)
+            self.enemies_spawned += 1
 
     def move_enemies(self):
         for enemy in self.enemies:
