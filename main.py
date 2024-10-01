@@ -168,7 +168,7 @@ class main:
             if event.type == pygame.MOUSEMOTION:
                 self.mouseX, self.mouseY = pygame.mouse.get_pos()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                self.state = "skilltree"
+                self.state = "start"
                 print(True)
                 return
 
@@ -218,12 +218,14 @@ class main:
                 self.mouseX, self.mouseY = pygame.mouse.get_pos()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if newgame_rect.collidepoint(self.mouseX, self.mouseY):
+                    self.game.max_enemies = int(self.game.max_enemies * 1.5)
+                    self.game.stage.enemies_spawned = 0
                     self.game.reset(self.guns)
                     self.state = "playing"
                     self.flag = False
-                    self.game.stage.max_enemies *= 1.5
-                    self.game.stage.enemies_spawned = 0
+                    print(self.game.stage.max_enemies, self.game.stage.enemies_spawned)
                     self.round += 1
+                    print(self.game.stage.max_enemies, self.game.stage.enemies_spawned)
 
 
                 if reload_rect.collidepoint(self.mouseX, self.mouseY) and self.game.money >= self.reload_cost:

@@ -68,13 +68,13 @@ class Shotgun(Gun):
     def __init__(self):
         self.bullet_spread = 0.5
         self.bullet_speed = 10
-        self.bullet_damage = 10
+        self.bullet_damage = 15
         self.max_ammo = 4
         self.ammo = 4
         self.reload_per_tick = 1/120
         self.bullet_size = 6
         self.autofire = False
-        self.shoot_delay_ticks = 30
+        self.shoot_delay_ticks = 10
 
     def draw(self, screen: pygame.Surface):
         

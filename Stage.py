@@ -7,11 +7,11 @@ class Stage:
     bullets: list[Bullet]
     temporary_objects: list[TemporaryObject]
 
-    def __init__(self):
+    def __init__(self, max_enemies: int = 10):
         self.enemies = []
         self.bullets = []
         self.temporary_objects = []
-        self.max_enemies = 10
+        self.max_enemies = max_enemies
         self.enemies_spawned = 0
 
     

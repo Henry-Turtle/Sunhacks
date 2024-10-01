@@ -30,15 +30,15 @@ class Game:
         self.grenade_radius = 100
         self.seconds = 0
         self.ticks = 0
+        self.max_enemies = 10
     
     def reset(self, guns: tuple[Gun]):
         self.ticks = 0
         self.seconds = 0
-        self.stage = Stage()
+        self.stage = Stage(self.max_enemies)
         self.player = Player(guns)
 
     def spawn_enemies(self):
-        rand = random.Random()
         enemy: Enemy = self.enemy_list[random.randint(0, len(self.enemy_list)-1)]
         speed: float = (random.randrange(5, 21)/20)*(1+self.seconds/30)
         hp: float = (random.random()+1)*(30+self.seconds/15)
