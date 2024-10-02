@@ -70,6 +70,7 @@ class Game:
         
 
     def shoot(self, mouse_pos: tuple):
+        player = [self.player.pos_x, self.player.pos_y]
         if not self.player.current_gun.can_fire():
             return
         if (isinstance(self.player.current_gun, SniperRifle)):
@@ -86,17 +87,18 @@ class Game:
         self.player.current_gun.ammo -= 1
         
     def shoot_machinegun(self, mouse_pos: tuple[int, int]):
+        player = [self.player.pos_x, self.player.pos_y]
         x, y = mouse_pos
-        dx = x - self.center[0]
-        dy = (y - self.center[1])*-1
+        dx = x - player[0]
+        dy = (y - player[1])*-1
         
         magnitude = (dx**2 + dy**2)**0.5
 
         v = [(dx/magnitude), (dy/magnitude)]
 
         self.stage.spawn_bullet(self.player.create_bullet(
-                v[0]*self.bullet_spawn_radius+self.center[0],
-                v[1]*self.bullet_spawn_radius*-1+self.center[1],
+                v[0]*self.bullet_spawn_radius+player[0],
+                v[1]*self.bullet_spawn_radius*-1+player[1],
                 v
                 ))
 
@@ -104,9 +106,10 @@ class Game:
         pygame.mixer.music.play()
         
     def shoot_shotgun(self, mouse_pos: tuple[int, int]):
+        player = [self.player.pos_x, self.player.pos_y]
         x, y = mouse_pos
-        dx = x - self.center[0]
-        dy = (y - self.center[1])*-1
+        dx = x - player[0]
+        dy = (y - player[1])*-1
         
         magnitude = (dx**2 + dy**2)**0.5
 
@@ -120,8 +123,8 @@ class Game:
             sin = math.sin(random_angle)
 
             self.stage.spawn_bullet(self.player.create_bullet(
-                    self.center[0] + cos*self.bullet_spawn_radius,
-                    self.center[1] + sin*self.bullet_spawn_radius*-1,
+                    player[0] + cos*self.bullet_spawn_radius,
+                    player[1] + sin*self.bullet_spawn_radius*-1,
                     [cos, sin]
                     ))
         
@@ -129,9 +132,10 @@ class Game:
         pygame.mixer.music.play()
 
     def shoot_sniper(self, mouse_pos: tuple):
+        player = [self.player.pos_x, self.player.pos_y]
         x, y = mouse_pos
-        dx = x - self.center[0]
-        dy = (y - self.center[1])*-1
+        dx = x - player[0]
+        dy = (y - player[1])*-1
         
         magnitude = (dx**2 + dy**2)**0.5
 
@@ -139,29 +143,30 @@ class Game:
         enemy_collisions = [b.getRect() for b in self.stage.enemies]
         damaged_enemies = []
         for i in range(len(enemy_collisions)):
-            if enemy_collisions[i].clipline(self.center, [v[0]+self.center[0], -1*v[1]+self.center[1]]):
+            if enemy_collisions[i].clipline(player, [v[0]+player[0], -1*v[1]+player[1]]):
                 damaged_enemies.append(self.stage.enemies[i])
         
         for enemy in damaged_enemies:
             self.damage(enemy, self.player.current_gun.bullet_damage)
         
-        self.stage.spawn_temporary_object(SniperTrail(self.center, v))
+        self.stage.spawn_temporary_object(SniperTrail(player, v))
 
         pygame.mixer.music.load("sniper.mp3")
         pygame.mixer.music.play()
 
     def shoot_grenadelauncher(self, mouse_pos: tuple):
+        player = [self.player.pos_x, self.player.pos_y]
         x, y = mouse_pos
-        dx = x - self.center[0]
-        dy = (y - self.center[1])*-1
+        dx = x - player[0]
+        dy = (y - player[1])*-1
         
         magnitude = (dx**2 + dy**2)**0.5
 
         v = [(dx/magnitude), (dy/magnitude)]
 
         self.stage.spawn_bullet(self.player.create_bullet(
-                v[0]*self.bullet_spawn_radius+self.center[0],
-                v[1]*self.bullet_spawn_radius*-1+self.center[1],
+                v[0]*self.bullet_spawn_radius+player[0],
+                v[1]*self.bullet_spawn_radius*-1+player[1],
                 v, self.grenade_radius
                 ))
         
@@ -206,8 +211,9 @@ class Game:
                 self.destroy_bullet(bullet)
 
 
-    def destroy_enemy(self, enemy: Enemy)->None:
-        self.money += (enemy.damage + enemy.max_hp) / 10
+    def destroy_enemy(self, enemy: Enemy, give_money: bool = True)->None:
+        if give_money:
+            self.money += (enemy.damage + enemy.max_hp) / 10
         self.stage.enemies.remove(enemy)
         
 

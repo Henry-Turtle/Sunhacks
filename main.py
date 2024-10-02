@@ -9,6 +9,9 @@ import sys
 import random
 
 class main:
+
+    actions = [0, 0, 0, 0]
+
     def __init__(self):
 # pygame setup
         pygame.init()
@@ -68,10 +71,32 @@ class main:
                     self.game.player.swap_gun(2)
                 if event.key == pygame.K_4:
                     self.game.player.swap_gun(3)
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_a]:
+            self.actions[1] = 1
+        if keys[pygame.K_d]:
+            self.actions[0] = 1
+        if keys[pygame.K_w]:
+            self.actions[3] = 1
+        if keys[pygame.K_s]:
+            self.actions[2] = 1
         #actions = pygame.key.get_pressed()
-        #self.game.player.handle_movement(actions[pygame.K_a], actions[pygame.K_d], actions[pygame.K_w], actions[pygame.K_s])
+        self.game.player.handle_movement(self.actions[0], self.actions[1], self.actions[2], self.actions[3])
+        if self.game.player.pos_x > self.WIDTH:
+            self.game.player.pos_x = self.WIDTH
+        if self.game.player.pos_x < 0:
+            self.game.player.pos_x = 0
+        if self.game.player.pos_y > self.HEIGHT:
+            self.game.player.pos_y = self.HEIGHT
+        if self.game.player.pos_y < 0:
+            self.game.player.pos_y = 0
+        
+
+
+        self.actions = [0, 0, 0, 0] 
         if pygame.mouse.get_pressed()[0] and self.game.player.current_gun.autofire and self.game.player.current_gun.can_fire():
             self.game.shoot((self.mouseX, self.mouseY))
+
         # self.game.player.current_gun.draw(self.screen)
         # fill the self.screen with a color to wipe away anything from last frame
         self.screen.fill("black")
@@ -85,15 +110,18 @@ class main:
         
 
         #*render the homebase
-        pygame.draw.rect(self.screen, pygame.Color("green"), pygame.Rect(self.WIDTH/2 - 15, self.HEIGHT/2 - 15, 30, 30))
+        # pygame.draw.rect(self.screen, pygame.Color("green"), pygame.Rect(self.WIDTH/2 - 15, self.HEIGHT/2 - 15, 30, 30))
+        pygame.draw.rect(self.screen, pygame.Color("green"), pygame.Rect(self.game.player.pos_x - 15, self.game.player.pos_y - 15, 30, 30))
 
         self.game.spawn_enemies()
         #*Render all enemies
         for enemy in self.game.stage.enemies:
-            self.game.stage.handle_enemy_movement(enemy, self.CENTER)
+            self.game.stage.handle_enemy_movement(enemy, (self.game.player.pos_x - 15, self.game.player.pos_y - 15))
             enemy.draw(self.screen, self.CENTER)
-            if enemy.getRect().colliderect(pygame.Rect(self.WIDTH/2 - 15, self.HEIGHT/2 - 15, 30, 30)):
+            # if enemy.getRect().colliderect(pygame.Rect(self.WIDTH/2 - 15, self.HEIGHT/2 - 15, 30, 30)):
+            if enemy.getRect().colliderect(self.game.player.get_rect()):
                 self.game.player.current_health -= enemy.damage
+                self.game.destroy_enemy(enemy, False)
             if self.game.player.current_health <= 0:
                 self.state = "gameover"
                 self.game.destroy_enemy(enemy)

@@ -9,14 +9,17 @@ class Player:
     speed: int
     health: float
 
-    def __init__(self, guns: tuple[Gun]):
+    def __init__(self, guns: tuple[Gun], speed: int = 2, pos_x: float = 700, pos_y: float = 400):
         self.guns = []
         for gun in guns:
             self.guns.append(gun)
 
         self.current_gun = self.guns[0]
-        self.current_health = 100
-        self.max_health = 100
+        self.current_health = 300
+        self.max_health = 300
+        self.speed = speed
+        self.pos_x = pos_x
+        self.pos_y = pos_y
     
     def create_bullet(self, x: float, y: float, direction: list[float], blast_radius: int = 100) -> Bullet:
         if isinstance(self.current_gun, GrenadeLauncher):
@@ -28,12 +31,19 @@ class Player:
     def swap_gun(self, i: int)->None:
         self.current_gun = self.guns[i]
 
-    def handle_movement(self, left: bool, right: bool, up: bool, down: bool):
-        v = [-1*left + 1*right, -1*up+1*down]
-        magnitude = (v[0]**2 + v[1]**2)**0.5
-        v = [(v[0]/magnitude)*self.speed, (v[1]/magnitude)*self.speed]
-        self.pos_x += v[0]
-        self.pos_y += v[1]
+    def handle_movement(self, left: int, right: int, up: int, down: int):
+        v = [(left - right), (up - down)]
+        magnitude = (((v[0]**2) + (v[1]**2))**0.5)
+        if magnitude != 0:
+            self.pos_x += self.speed * (v[0]/magnitude)
+            self.pos_y += self.speed * (v[1]/magnitude)            
         
+        # self.pos_x += left * self.speed
+        # self.pos_y += up * self.speed
+        # self.pos_x -= right * self.speed
+        # self.pos_y -= down * self.speed
+
+    def get_rect(self):
+        return pygame.Rect(self.pos_x - 15, self.pos_y - 15, 30, 30)
 
     

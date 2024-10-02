@@ -20,9 +20,9 @@ class Stage:
             self.enemies.append(enemy)
             self.enemies_spawned += 1
 
-    def move_enemies(self):
+    def move_enemies(self, target: list[int, int]):
         for enemy in self.enemies:
-            enemy.handle_movement()
+            enemy.handle_movement(target)
     
     def spawn_bullet(self, bullet: Bullet):
         self.bullets.append(bullet)
